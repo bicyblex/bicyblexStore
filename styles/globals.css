@@ -1,26 +1,22 @@
+/* 1. IMPORTACIÓN DE FUENTES DE GOOGLE FONTS */
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&family=Share+Tech+Mono&display=swap");
+
+/* 2. INICIALIZACIÓN NATIVA DE TAILWIND v4 */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* 3. CONFIGURACIÓN DEL TEMA */
+@theme {
+  /* Bebas Neue por defecto es extra bold/gorda, ideal para títulos masivos */
+  --font-display: "Bebas Neue", sans-serif;
+  --font-mono: "Share Tech Mono", monospace;
+  --font-sans: "Inter", sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 4. REGLAS Y CONFIGURACIONES GLOBALES */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #0c0f0f;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
