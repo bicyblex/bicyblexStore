@@ -18,11 +18,9 @@ export default function Hero() {
 
       {/* 2. CONTENEDOR DE CONTENIDO */}
       <div className="relative z-20 max-w-[1920px] m-auto w-[90%] py-20 flex flex-col justify-center">
-        {/* CONTENEDOR ESTRUCTURAL DEL TEXTO */}
         <div className="max-w-[850px] space-y-6">
-          {/* Tag superior: BEST BIKE BUILDS (font-mono con espaciado amplio y caja amarilla) */}
           <div className="inline-block bg-[#ffb800] text-black px-3 py-1 text-[11px] uppercase tracking-[0.25em] font-mono font-bold">
-            Best Bike Builds
+            Aventura sin límites
           </div>
 
           {/* Título Principal Gigante (font-display con Bebas Neue) */}
@@ -34,9 +32,9 @@ export default function Hero() {
           {/* Bloque de descripción técnica con borde izquierdo */}
           <div className="border-l-2 border-[#ffb800] pl-6 md:pl-8 max-w-[580px]">
             <p className="font-sans text-[#d5c4ab] text-xs md:text-sm leading-relaxed tracking-wide font-medium">
-              Ingeniería de precisión aplicada al ciclismo extremo. Diseñamos
-              máquinas de alto rendimiento y kits de conversión eléctrica con
-              estándares de grado aeroespacial.
+              Transforma tus traslados diarios en la parte favorita de tu día.
+              Bicicletas urbanas diseñadas para la eficiencia, el estilo y la
+              comodidad en la jungla de asfalto. Muévete más rápido, vive mejor.
             </p>
           </div>
 
@@ -52,7 +50,7 @@ export default function Hero() {
       {/* 3. DETALLE INFERIOR: SCROLL TO EXPLORE */}
       <div className="absolute bottom-8 left-[5%] z-20 hidden md:flex items-center gap-4">
         <span className="font-mono text-[#d5c4ab]/40 text-[10px] uppercase tracking-[0.3em] font-bold">
-          Scroll to explore
+          Desliza para ver contenido
         </span>
         <div className="w-16 h-[1px] bg-[#333535]"></div>
       </div>

@@ -1,12 +1,12 @@
 import React from "react";
-
+import { FaWhatsapp } from "react-icons/fa";
 export default function TopNav() {
   const navLinks = [
-    { name: "Bicicletas", href: "#" },
-    { name: "Motos", href: "#" },
-    { name: "Kits", href: "#" },
-    { name: "Nosotros", href: "#" }, // Cambiado a "Nosotros" para calcar exactamente tu diseño de imagen
-    { name: "Contáctanos", href: "#" },
+    { name: "Bicicletas", href: "#Bicicletas" },
+    { name: "Motos", href: "#Motos-electricas" },
+    { name: "Kits", href: "#Kits-electricos" },
+    { name: "Nosotros", href: "#Nosotros" }, // Cambiado a "Nosotros" para calcar exactamente tu diseño de imagen
+    { name: "Contáctanos", href: "#Contáctanos" },
   ];
 
   return (
@@ -15,18 +15,9 @@ export default function TopNav() {
         {/* BLOQUE IZQUIERDO: Logos */}
         <div className="flex items-center gap-5">
           {/* Isotipo: Escudo Amarillo */}
-          <div className="w-[45px] h-[45px] bg-[#ffb800] flex items-center justify-center shrink-0">
-            <span className="text-black font-black text-xl font-display">
-              B
-            </span>
-          </div>
-
-          {/* Logotipo: Texto BICYBLEX utilizando font-display */}
-          <div className="h-[32px] flex items-center">
-            <span className="text-[#ffb800] font-black tracking-widest text-xl italic font-display">
-              BICYBLEX
-            </span>
-          </div>
+          <a href="#" className=" flex items-center justify-center shrink-0">
+            <img src="/logo.png" alt="Isotipo" className="w-52 h-auto" />
+          </a>
         </div>
 
         {/* BLOQUE CENTRAL: Menú utilizando la tipografía font-mono de telemetría */}
@@ -49,8 +40,11 @@ export default function TopNav() {
         <div className="flex items-center h-full border-l border-[#333535]/30 pl-8 lg:pl-10">
           <a
             href="#"
-            className="font-mono text-[#d5c4ab] hover:text-[#ffb800] font-bold tracking-[0.2em] text-xs uppercase transition-colors"
+            className="flex items-center  gap-2 font-mono text-[#d5c4ab] hover:text-[#ffb800] font-bold tracking-[0.2em] text-xs uppercase transition-colors"
           >
+            <p className="text-4xl">
+              <FaWhatsapp />
+            </p>
             Whatsapp
           </a>
         </div>

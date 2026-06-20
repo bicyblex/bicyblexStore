@@ -1,8 +1,12 @@
 import React from "react";
+import { BsInstagram, BsTiktok, BsWhatsapp } from "react-icons/bs";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#0c0f0f] text-white pt-20 pb-10 border-t-4 border-[#ffb800]">
+    <footer
+      className="w-full bg-[#0c0f0f] text-white pt-20 pb-10 border-t-4 border-[#ffb800]"
+      id="Contáctanos"
+    >
       {/* CONTENEDOR PRINCIPAL: Alineado al 90% general de tu ecosistema */}
       <div className="max-w-[1920px] m-auto w-[90%]">
         {/* BLOQUE SUPERIOR: REJILLA DE 4 COLUMNAS */}
@@ -11,13 +15,7 @@ export default function Footer() {
           <div className="space-y-6">
             {/* Logos agrupados */}
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-[#ffb800] flex items-center justify-center shrink-0">
-                {/* Reemplaza este SVG por tu isotipo real si lo tienes en asset */}
-                <span className="text-black font-black text-xl italic">B</span>
-              </div>
-              <span className="text-white font-black tracking-widest text-xl italic">
-                BICYBLEX
-              </span>
+              <img src="/logo.png" alt="Logo" className="w-56" />
             </div>
 
             {/* Texto descriptivo exacto */}
@@ -83,27 +81,27 @@ export default function Footer() {
           {/* COLUMNA 2: NAVIGATION */}
           <div className="space-y-6">
             <h4 className="font-mono text-xs text-white tracking-[0.25em] uppercase font-bold">
-              NAVIGATION
+              NAVEGACIÓN
             </h4>
             <ul className="space-y-4 text-[11px] md:text-xs font-mono font-bold tracking-[0.15em] text-[#d5c4ab] p-0 m-0 list-none">
               <li>
                 <a href="#" className="hover:text-[#ffb800] transition-colors">
-                  2024 COLLECTION
+                  BICICLETAS
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-[#ffb800] transition-colors">
-                  KITS & MOTORS
+                  BICI MOTOS ELÉCTRICAS
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-[#ffb800] transition-colors">
-                  CUSTOM BUILDS
+                  KITS DE CONVERSION ELECTRICOS
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-[#ffb800] transition-colors">
-                  DEALER LOCATOR
+                  NOSOTROS
                 </a>
               </li>
             </ul>
@@ -112,27 +110,22 @@ export default function Footer() {
           {/* COLUMNA 3: ENGINEERING */}
           <div className="space-y-6">
             <h4 className="font-mono text-xs text-white tracking-[0.25em] uppercase font-bold">
-              ENGINEERING
+              DIVERSIÓN
             </h4>
             <ul className="space-y-4 text-[11px] md:text-xs font-mono font-bold tracking-[0.15em] text-[#d5c4ab] p-0 m-0 list-none">
               <li>
                 <a href="#" className="hover:text-[#ffb800] transition-colors">
-                  WARRANTY DATA
+                  GARANTÍA DE CALIDAD
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-[#ffb800] transition-colors">
-                  INSTALL MANUALS
+                  INSTALACIONES POR EXPERTOS
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-[#ffb800] transition-colors">
-                  SAFETY PROTOCOLS
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-[#ffb800] transition-colors">
-                  R&D LOGS
+                  PROTOCOLOS SEGUROS
                 </a>
               </li>
             </ul>
@@ -141,23 +134,18 @@ export default function Footer() {
           {/* COLUMNA 4: FIELD REPORTS (SUSCRIPCIÓN) */}
           <div className="space-y-5">
             <h4 className="font-mono text-xs text-white tracking-[0.25em] uppercase font-bold">
-              FIELD REPORTS
+              REDES SOCIALES
             </h4>
             <p className="text-[#d5c4ab] text-xs leading-relaxed tracking-wide max-w-[260px]">
-              Suscríbete para recibir especificaciones técnicas y lanzamientos
-              de prototipos.
+              Suscríbete a nuestras redes para conocer especificaciones técnicas
+              y lanzamientos de nuevos productos.
             </p>
 
             {/* Caja de Input + Botón Acoplados */}
-            <div className="flex border border-[#333535]/40 max-w-[280px]">
-              <input
-                type="email"
-                placeholder="EMAIL"
-                className="bg-[#080a0a] text-xs font-mono tracking-widest px-4 py-3 text-white placeholder-gray-600 focus:outline-none w-full uppercase"
-              />
-              <button className="bg-[#ffb800] text-black font-mono font-black text-xs tracking-widest px-6 py-3 uppercase hover:bg-white transition-colors">
-                JOIN
-              </button>
+            <div className="flex max-w-[280px]">
+              <BsTiktok className="text-[#ffb800] text-2xl p-1" />
+              <BsInstagram className="text-[#ffb800] text-2xl p-1" />
+              <BsWhatsapp className="text-[#ffb800] text-2xl p-1" />
             </div>
           </div>
         </div>

@@ -7,21 +7,21 @@ export default function NewsLetter() {
       id: 1,
       tag: "NUEVO INGRESO",
       tagColor: "bg-[#ffb800] text-black",
-      title: "APEX V2 // ULTRA LIGHT CARBON",
-      desc: "Llegó el nuevo lote de cuadros T800 de alto módulo. Rigidez estructural incrementada en un 12% para descensos técnicos severos.",
+      title: "MOTOR 30000W // ULTRA POTENCIA",
+      desc: "Llegó el nuevo lote de motores electricos para bicicletas de 3000w, aprovecha y encuentrala hoy con descuento.",
       image:
-        "https://mlo1wbhvgmgt.i.optimole.com/w:1024/h:576/q:mauto/g:sm/f:best/https://pethero.co.za/wp-content/uploads/2026/02/Indoor-Cats-Blog-Banner.png",
-      linkText: "EXPLORAR DETALLES",
+        "https://image.made-in-china.com/202f0j00DMzkGhURvLco/14inch-3000W-60V-120km-H-Hub-Motor-with-Disc-Brake-for-Electric-Bike.webp",
+      linkText: "PREGUNTAR POR WHATSAPP",
       linkUrl: "#",
     },
     {
       id: 2,
-      tag: "PROMOCIÓN O DESCUENTO",
+      tag: "PROMOCIÓN",
       tagColor: "bg-red-600 text-white",
-      title: "POWER PACKS // TERMINAL SALE",
-      desc: "15% de descuento en kits de conversión de 500W por tiempo limitado o hasta agotar stock de celdas premium. Código: HIGHVOLT",
+      title: "DUO DINÁMICO // PROMOCION ÚNICA",
+      desc: "15% de descuento en la compra de dos bicicletas eléctricas, aprovecha esta oferta por tiempo limitado y equipa tu garaje con lo mejor en movilidad urbana.",
       image:
-        "https://mlo1wbhvgmgt.i.optimole.com/w:1024/h:576/q:mauto/g:sm/f:best/https://pethero.co.za/wp-content/uploads/2026/02/Indoor-Cats-Blog-Banner.png",
+        "https://thumbs.dreamstime.com/z/ejemplo-de-dos-bicicletas-68710765.jpg",
       linkText: "APLICAR DESCUENTO",
       linkUrl: "#",
     },
@@ -31,7 +31,8 @@ export default function NewsLetter() {
       tagColor: "bg-blue-600 text-white",
       title: "NIGHT RADAR // LIMA NIGHT RIDE",
       desc: "Prueba de potencia en vivo y test de autonomía urbana colectiva. Punto de encuentro en base central este viernes a las 20:00.",
-      image: "/titan.png",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpIih2Ry9Ss0k1YXEa_ga6sFGoI2HfmbRwqQ&s",
       linkText: "REGISTRAR ASISTENCIA",
       linkUrl: "#",
     },
@@ -44,7 +45,7 @@ export default function NewsLetter() {
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev + 1));
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1)); // Corregido el prev - 1 que sumaba en vez de restar
   };
 
   return (
@@ -53,12 +54,12 @@ export default function NewsLetter() {
         {/* ENCABEZADO DE SECCIÓN */}
         <div className="flex items-end justify-between border-b border-[#333535]/20 pb-8 mb-12">
           <div>
-            {/* Tag superior en font-mono */}
+            {/* Tag superior en font-mono con tracking amplio */}
             <span className="font-mono text-[#ffb800] text-xs font-bold tracking-[0.3em] uppercase">
               RADAR DE OPERACIONES
             </span>
-            {/* Título de sección en font-display con interlineado cerrado */}
-            <h2 className="font-display text-[38px] sm:text-[48px] md:text-[56px] font-black uppercase tracking-tighter leading-[0.9] mt-2">
+            {/* Título de sección en font-display cambiado de tracking-tighter a tracking-normal */}
+            <h2 className="font-display text-[38px] sm:text-[48px] md:text-[56px] font-black uppercase tracking-normal leading-[0.95] mt-3">
               NOTICIAS & EVENTOS
             </h2>
           </div>
@@ -118,27 +119,27 @@ export default function NewsLetter() {
               {/* BLOQUE IZQUIERDO: TEXTOS */}
               <div className="w-full md:w-1/2 p-8 md:p-14 flex flex-col justify-between order-2 md:order-1 h-1/2 md:h-full bg-[#080a0a]">
                 <div className="space-y-6">
-                  {/* Etiqueta dinámica en font-mono */}
+                  {/* Etiqueta dinámica en font-mono con tracking expandido */}
                   <div>
                     <span
-                      className={`font-mono text-[10px] font-bold uppercase tracking-widest px-3 py-1 ${slide.tagColor}`}
+                      className={`font-mono text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1 ${slide.tagColor}`}
                     >
                       {slide.tag}
                     </span>
                   </div>
 
-                  {/* Título en font-display para que comparta la agresividad del Hero */}
-                  <h3 className="font-display text-3xl md:text-5xl font-black uppercase tracking-tight leading-[0.9] text-white">
+                  {/* Título cambiado de tracking-tight a tracking-wide para separar los caracteres */}
+                  <h3 className="font-display text-3xl md:text-5xl font-black uppercase tracking-wide leading-[1.0] text-white">
                     {slide.title}
                   </h3>
 
-                  {/* Párrafo explicativo con la limpieza de font-sans */}
+                  {/* Párrafo explicativo */}
                   <p className="font-sans text-gray-400 text-xs md:text-sm leading-relaxed tracking-wide max-w-[480px]">
                     {slide.desc}
                   </p>
                 </div>
 
-                {/* Botón Call to Action con el look de comandos del sistema en font-mono */}
+                {/* Botón Call to Action */}
                 <div className="pt-6 md:pt-0">
                   <a
                     href={slide.linkUrl}
@@ -149,7 +150,7 @@ export default function NewsLetter() {
                 </div>
               </div>
 
-              {/* BLOQUE DERECHO: IMAGEN LIMPIA */}
+              {/* BLOQUE DERECHO: IMAGEN */}
               <div className="w-full md:w-1/2 h-1/2 md:h-full relative overflow-hidden order-1 md:order-2 bg-[#111414]">
                 <img
                   src={slide.image}
@@ -161,7 +162,7 @@ export default function NewsLetter() {
             </div>
           ))}
 
-          {/* INDICADORES DE BARRAS DE PROGRESO DEBAJO (ESTILO INTERFAZ) */}
+          {/* INDICADORES DE BARRAS DE PROGRESO DEBAJO */}
           <div className="absolute bottom-4 left-8 md:left-14 z-20 flex gap-2">
             {slides.map((_, index) => (
               <div
