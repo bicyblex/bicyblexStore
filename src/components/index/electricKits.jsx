@@ -1,36 +1,52 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "../../lib/supabaseClient";
 import { IoFlash, IoLocate, IoBuild } from "react-icons/io5";
 
 export default function Kits() {
-  const kits = [
-    {
-      id: "01",
-      category: "URBANO",
-      name: "350W ELITE",
-      desc: "Optimizado para la jungla de asfalto. Entrega de torque suave y batería discreta.",
-      price: "$450 USD",
-      progress: "w-[40%]",
-      icon: <IoFlash className="w-4 h-4 text-gray-500" />,
-    },
-    {
-      id: "02",
-      category: "EXPLORADOR",
-      name: "500W TERRA",
-      desc: "El estándar de oro para XC. Balance perfecto entre peso suspendido y autonomía.",
-      price: "$680 USD",
-      progress: "w-[65%]",
-      icon: <IoLocate className="w-4 h-4 text-gray-500" />,
-    },
-    {
-      id: "03",
-      category: "PRO",
-      name: "1000W APEX",
-      desc: "Ingeniería pura para Enduro. Sensor de torque ultra sensible para ascensos técnicos.",
-      price: "$920 USD",
-      progress: "w-[85%]",
-      icon: <IoFlash className="w-4 h-4 text-gray-500" />,
-    },
-  ];
+  const [kits, setKits] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchKits = async () => {
+      setLoading(true);
+
+      // 1. Quitamos el filtro temporalmente para ver qué llega
+      // 2. Usamos .select("*, categories(*)") para ver la categoría asociada
+      const { data, error } = await supabase
+        .from("products")
+        .select("*, categories(*)");
+
+      if (error) {
+        console.error("Error al traer datos:", error);
+      } else if (data) {
+        console.log("Datos recibidos de Supabase:", data); // <--- MIRA ESTO EN LA CONSOLA (F12)
+
+        // Filtramos en el frontend para estar 100% seguros de que el nombre coincide
+        // Busca en tu base de datos cómo se escribe exactamente: "Kits Eléctricos"
+        const kitsFiltrados = data.filter(
+          (item) => item.categories?.name === "Kits Eléctricos"
+        );
+
+        console.log("Kits filtrados:", kitsFiltrados);
+
+        const formattedKits = kitsFiltrados.slice(0, 3).map((item) => ({
+          id: item.id,
+          category: "MODULAR",
+          name: item.name,
+          desc:
+            item.specs?.descripcion ||
+            "Ingeniería de alta potencia para tu ruta.",
+          price: `s/${item.price}`,
+          progress: item.specs?.progress || "w-[80%]",
+          icon: <IoFlash className="w-4 h-4 text-gray-500" />,
+        }));
+
+        setKits(formattedKits);
+      }
+      setLoading(false);
+    };
+    fetchKits();
+  }, []);
 
   return (
     <section
@@ -42,7 +58,9 @@ export default function Kits() {
       id="Kits-electricos"
     >
       <div className="max-w-[1920px] m-auto w-[90%] grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+        {/* LADO IZQUIERDO: TEXTO */}
         <div className="space-y-6">
+          {/* ... tu contenido de texto se mantiene igual ... */}
           <div>
             <span className="font-mono text-[#ffb800] text-xs font-bold tracking-[0.3em] uppercase">
               Modular Power Kits
@@ -52,61 +70,63 @@ export default function Kits() {
             </h2>
           </div>
           <p className="font-sans text-[#d5c4ab] text-sm leading-relaxed tracking-wide max-w-[380px]">
-            Nuestros kits de conversión de alta potencia están diseñados con
-            arquitectura modular para una integración limpia. Potencia bruta sin
-            comprometer la estética de tu build.
+            Diseñados con arquitectura modular para una integración limpia.
+            Potencia bruta sin comprometer la estética de tu build.
           </p>
-          <div className="pt-4 flex items-center gap-4">
-            <div className="w-12 h-[1px] bg-[#333535]"></div>
-            <span className="text-[10px] font-mono tracking-[0.2em] text-gray-500 uppercase">
-              Select Voltage Range
-            </span>
-          </div>
         </div>
 
+        {/* LADO DERECHO: GRID DE KITS */}
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {kits.map((kit) => (
-            <div
-              key={kit.id}
-              className="bg-[#121414]/90 border border-[#333535]/30 p-8 flex flex-col justify-between h-[280px] relative group hover:border-[#ffb800]/50 transition-colors duration-300"
-            >
-              <div>
-                <div className="flex justify-between items-center font-mono">
-                  <span className="text-[11px] text-[#ffb800] tracking-[0.2em] font-bold">
-                    {kit.id} <span className="text-gray-600 mx-1">/</span>{" "}
-                    {kit.category}
-                  </span>
-                  {kit.icon}
+          {loading ? (
+            <p className="text-gray-500">Cargando kits...</p>
+          ) : (
+            kits.map((kit, index) => (
+              <div
+                key={kit.id}
+                className="bg-[#121414]/90 border border-[#333535]/30 p-8 flex flex-col justify-between h-[280px] relative group hover:border-[#ffb800]/50 transition-colors duration-300"
+              >
+                <div>
+                  <div className="flex justify-between items-center font-mono">
+                    <span className="text-[11px] text-[#ffb800] tracking-[0.2em] font-bold">
+                      0{index + 1} <span className="text-gray-600 mx-1">/</span>{" "}
+                      {kit.category}
+                    </span>
+                    <IoFlash className="w-4 h-4 text-gray-500" />
+                  </div>
+                  <h3 className="font-display text-2xl font-black uppercase tracking-wide mt-5 text-white">
+                    {kit.name}
+                  </h3>
+                  <p className="font-sans text-gray-400 text-xs mt-3 leading-relaxed">
+                    {kit.desc}
+                  </p>
                 </div>
 
-                <h3 className="font-display text-2xl font-black uppercase tracking-wide leading-[1.0] mt-5 text-white">
-                  {kit.name}
-                </h3>
-                <p className="font-sans text-gray-400 text-xs mt-3 leading-relaxed tracking-wide max-w-[290px]">
-                  {kit.desc}
-                </p>
+                {/* BARRA DE PROGRESO */}
+                <div className="space-y-4">
+                  <div className="w-full h-[2px] bg-[#222424]">
+                    <div
+                      className={`h-full ${
+                        kit.progress || "w-[50%]"
+                      } bg-[#ffb800]`}
+                    ></div>
+                  </div>
+                  <div className="flex justify-between items-center pt-1">
+                    <span className="font-display text-xl font-black text-white">
+                      {kit.price}
+                    </span>
+                    <a
+                      href="#"
+                      className="font-mono text-[10px] font-bold uppercase text-[#ffb800] hover:text-white"
+                    >
+                      QUIERO ESTE →
+                    </a>
+                  </div>
+                </div>
               </div>
+            ))
+          )}
 
-              <div className="space-y-4">
-                <div className="w-full h-[2px] bg-[#222424]">
-                  <div className={`h-full ${kit.progress} bg-[#ffb800]`}></div>
-                </div>
-                <div className="flex justify-between items-center pt-1">
-                  <span className="font-display text-xl font-black tracking-wide text-white">
-                    {kit.price}
-                  </span>
-                  <a
-                    href="#"
-                    className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#ffb800] flex items-center gap-2 hover:text-white transition-colors"
-                  >
-                    QUIERO ESTE <span>→</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          ))}
-
-          {/* CUARTA TARJETA: "CUSTOM SYSTEM" MEJORADA */}
+          {/* CUARTA TARJETA FIJA */}
           <div
             className="border border-[#ffb800] p-8 flex flex-col justify-between h-[280px] relative overflow-hidden bg-[#0c0f0f] group"
             style={{
@@ -114,32 +134,26 @@ export default function Kits() {
               backgroundSize: "20px 20px",
             }}
           >
-            {/* Gradiente de fondo sutil para dar profundidad */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#ffb800]/10 to-transparent"></div>
-
             <div className="relative z-10">
               <div className="font-mono text-[11px] text-[#ffb800] tracking-[0.2em] font-bold flex items-center gap-2">
                 <IoBuild className="text-[#ffb800]" /> 04{" "}
                 <span className="text-gray-600">/</span> CUSTOM SYSTEM
               </div>
-
-              <h3 className="font-display text-2xl font-black uppercase tracking-wide leading-[1.0] mt-5 text-white">
+              <h3 className="font-display text-2xl font-black uppercase mt-5 text-white">
                 ¿PROYECTO <br />{" "}
                 <span className="text-[#ffb800]">A MEDIDA?</span>
               </h3>
-
-              <p className="font-sans text-gray-400 text-xs mt-3 leading-relaxed tracking-wide">
-                Ingeniería de bobinados y sistemas de potencia de alto voltaje
-                para competición extrema.
+              <p className="font-sans text-gray-400 text-xs mt-3 leading-relaxed">
+                Ingeniería de bobinados y sistemas de alta potencia para
+                competición.
               </p>
             </div>
-
             <div className="relative z-10 pt-4">
               <a
-                href=""
-                className="flex justify-center font-mono w-full bg-[#ffb800] text-black font-black text-[10px] uppercase tracking-[0.2em] py-4 text-center hover:bg-white transition-all duration-300 transform group-hover:scale-[1.02]"
+                href="#"
+                className="flex justify-center font-mono w-full bg-[#ffb800] text-black font-black text-[10px] uppercase py-4 hover:bg-white transition-all"
               >
-                Hablar con un Ingeniero
+                Consultar más kits
               </a>
             </div>
           </div>

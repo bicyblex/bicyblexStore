@@ -13,15 +13,11 @@ const CONFIG = {
     { key: "potencia", label: "Potencia" },
     { key: "velocidad", label: "Velocidad" },
   ],
-  "kits-electricos": [
-    { key: "voltaje", label: "Voltaje" },
-    { key: "potencia", label: "Potencia" },
-    { key: "bateria", label: "Batería" },
-  ],
+  "kits-electricos": [{ key: "descripcion", label: "Descripcion" }],
   accesorios: [
-    { key: "material", label: "Material" },
-    { key: "color", label: "Color" },
-    { key: "compatibilidad", label: "Compatibilidad" },
+    { key: "Dato 1", label: "Dato 1" },
+    { key: "Dato 2", label: "Dato 2" },
+    { key: "Dato 3", label: "Dato 3" },
   ],
 };
 
@@ -41,74 +37,105 @@ export const ProductForm = ({
   const fields = cat ? CONFIG[cat.slug] || [] : [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-      <div className="bg-[#080a0a] border border-[#333535] p-8 w-[500px]">
-        <button onClick={onClose} className="text-white float-right">
-          <FiX />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div className="bg-[#080a0a] border border-[#333535]/40 w-full max-w-[650px] max-h-[90vh] overflow-y-auto p-8 relative">
+        {/* Botón Cerrar */}
+        <button
+          onClick={onClose}
+          className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
+        >
+          <FiX size={20} />
         </button>
-        <h2 className="text-[#ffb800] font-bold mb-4">
-          {formData.id ? "EDITAR PRODUCTO" : "NUEVO PRODUCTO"}
-        </h2>
+
+        <div className="mb-6">
+          <span className="font-mono text-[#ffb800] text-[10px] font-bold tracking-widest uppercase block">
+            // Terminal de Gestión de Inventario
+          </span>
+          <h3 className="text-lg font-bold uppercase mt-1">
+            {formData.id ? "Modificar Producto" : "Registrar Nuevo Producto"}
+          </h3>
+        </div>
 
         <form
           onSubmit={(e) => {
             e.preventDefault();
             onSave(formData);
           }}
-          className="space-y-4"
+          className="space-y-5"
         >
-          <input
-            required
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="Nombre"
-            className="w-full bg-[#111414] p-2 border border-[#333535] text-white"
-          />
-          <div className="flex gap-4">
+          <div>
+            <label className="font-mono block text-[10px] font-bold uppercase text-gray-500 mb-1">
+              Nombre del producto
+            </label>
             <input
               required
-              type="number"
-              value={formData.price}
+              value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, price: e.target.value })
+                setFormData({ ...formData, name: e.target.value })
               }
-              placeholder="Precio"
-              className="w-full bg-[#111414] p-2 border border-[#333535] text-white"
-            />
-            <input
-              required
-              type="number"
-              value={formData.stock || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, stock: e.target.value })
-              }
-              placeholder="Stock"
-              className="w-full bg-[#111414] p-2 border border-[#333535] text-white"
+              className="w-full bg-[#111414] border border-[#333535]/40 p-3 text-sm text-white focus:outline-none focus:border-[#ffb800]"
             />
           </div>
-          <select
-            required
-            value={formData.categoryId}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                categoryId: e.target.value,
-                specs: {},
-              })
-            }
-            className="w-full bg-[#111414] p-2 border border-[#333535] text-white"
-          >
-            <option value="">Selecciona Categoría</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
 
-          <div className="space-y-1">
-            <label className="text-xs text-gray-400 uppercase">
-              Imagen del producto
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="font-mono block text-[10px] font-bold uppercase text-gray-500 mb-1">
+                Precio
+              </label>
+              <input
+                required
+                type="number"
+                value={formData.price}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: e.target.value })
+                }
+                className="w-full bg-[#111414] border border-[#333535]/40 p-3 text-sm text-white focus:outline-none focus:border-[#ffb800]"
+              />
+            </div>
+            <div>
+              <label className="font-mono block text-[10px] font-bold uppercase text-gray-500 mb-1">
+                Stock
+              </label>
+              <input
+                required
+                type="number"
+                value={formData.stock || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, stock: e.target.value })
+                }
+                className="w-full bg-[#111414] border border-[#333535]/40 p-3 text-sm text-white focus:outline-none focus:border-[#ffb800]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="font-mono block text-[10px] font-bold uppercase text-gray-500 mb-1">
+              Categoría
+            </label>
+            <select
+              required
+              value={formData.categoryId}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  categoryId: e.target.value,
+                  specs: {},
+                })
+              }
+              className="w-full bg-[#111414] border border-[#333535]/40 p-3 text-sm text-white focus:outline-none focus:border-[#ffb800] uppercase"
+            >
+              <option value="">Selecciona una categoría</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="font-mono block text-[10px] font-bold uppercase text-gray-500 mb-1">
+              Imagen del Producto
             </label>
             <input
               type="file"
@@ -116,28 +143,40 @@ export const ProductForm = ({
               onChange={(e) =>
                 setFormData({ ...formData, imageFile: e.target.files[0] })
               }
-              className="w-full bg-[#111414] p-2 border border-[#333535] text-white text-sm"
+              className="w-full bg-[#111414] border border-[#333535]/40 p-3 font-mono text-xs text-gray-400 file:mr-4 file:bg-[#ffb800] file:text-black file:font-bold file:text-[10px] file:uppercase cursor-pointer"
             />
           </div>
-          {fields.map((f) => (
-            <input
-              key={f.key}
-              placeholder={f.label}
-              value={formData.specs[f.key] || ""}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  specs: { ...formData.specs, [f.key]: e.target.value },
-                })
-              }
-              className="w-full bg-[#161a1a] p-2 border border-[#333535] text-white"
-            />
-          ))}
+
+          {fields.length > 0 && (
+            <div className="pt-2 border-t border-[#333535]/30">
+              <label className="font-mono block text-[10px] font-bold uppercase text-gray-500 mb-3">
+                Especificaciones Técnicas
+              </label>
+              {/* Grid de 2 columnas para las especificaciones */}
+              <div className="grid grid-cols-1 gap-3">
+                {fields.map((f) => (
+                  <input
+                    key={f.key}
+                    placeholder={f.label}
+                    value={formData.specs[f.key] || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        specs: { ...formData.specs, [f.key]: e.target.value },
+                      })
+                    }
+                    className="w-full bg-[#111414] border border-[#333535]/40 p-3 text-sm text-white placeholder:text-gray-700 focus:outline-none focus:border-[#ffb800]"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-[#ffb800] py-3 font-bold uppercase text-black hover:bg-white transition-colors"
+            className="font-mono w-full bg-[#ffb800] text-black font-bold text-xs uppercase py-4 mt-2 tracking-widest transition-all hover:bg-white"
           >
-            Guardar Producto
+            Guardar en el sistema
           </button>
         </form>
       </div>

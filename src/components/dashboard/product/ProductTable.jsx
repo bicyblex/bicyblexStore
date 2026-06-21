@@ -1,7 +1,9 @@
 import React from "react";
-import { FiTrash2, FiEdit2 } from "react-icons/fi";
+import { FiTrash2, FiEdit2, FiEye } from "react-icons/fi"; // 1. Importado FiEye
 
-export const ProductTable = ({ products, onEdit, onDelete, loading }) => (
+export const ProductTable = (
+  { products, onEdit, onDelete, onViewDetail, loading } // 2. Agregado onViewDetail
+) => (
   <div className="bg-[#080a0a] border border-[#333535]/20 overflow-x-auto">
     {loading ? (
       <div className="p-10 text-center font-mono text-xs text-gray-500 uppercase tracking-widest">
@@ -71,6 +73,14 @@ export const ProductTable = ({ products, onEdit, onDelete, loading }) => (
               </td>
               <td className="p-4 text-right">
                 <div className="flex justify-end gap-2">
+                  {/* 3. Botón de Ver Detalle */}
+                  <button
+                    onClick={() => onViewDetail(item)}
+                    className="p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-blue-400 hover:border-blue-400 transition-colors"
+                    title="Ver Detalle"
+                  >
+                    <FiEye size={14} />
+                  </button>
                   <button
                     onClick={() => onEdit(item)}
                     className="p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-[#ffb800] hover:border-[#ffb800] transition-colors"

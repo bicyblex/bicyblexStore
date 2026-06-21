@@ -7,9 +7,10 @@ import Features from "@/src/components/index/features";
 import Footer from "@/src/components/index/footer";
 import NewsLetter from "@/src/components/index/newsLetter";
 import Head from "next/head";
+import { GlobalProvider } from "@/src/context/GlobalContext";
 export default function Home() {
   return (
-    <>
+    <GlobalProvider>
       <Head>
         <title>
           Bicyblex Perú | Bicicletas y todo lo que necesitas para ir a velocidad
@@ -30,6 +31,6 @@ export default function Home() {
         <Features />
         <Footer />
       </div>
-    </>
+    </GlobalProvider>
   );
 }
