@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
-
+import { useGlobalData } from "@/src/context/GlobalContext";
 export default function ElectricMotos() {
   const [motos, setMotos] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const data = useGlobalData();
   useEffect(() => {
     fetchMotos();
   }, []);
@@ -118,7 +118,11 @@ export default function ElectricMotos() {
 
                   <div className="mt-8">
                     <a
-                      href=""
+                      href={`${data.productWhatsAppMessageUrl}+${
+                        encodeURIComponent(moto.name) +
+                        " " +
+                        encodeURIComponent(moto.motor)
+                      }`}
                       className="flex justify-center font-mono w-full bg-transparent border border-[#ffb800] text-[#ffb800] group-hover:bg-[#ffb800] group-hover:text-black font-bold text-xs uppercase tracking-[0.2em] py-4 transition-all duration-300"
                     >
                       Ordenar Ahora

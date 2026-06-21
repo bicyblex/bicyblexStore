@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
-import { IoFlash, IoLocate, IoBuild } from "react-icons/io5";
+import { IoFlash, IoBuild } from "react-icons/io5";
+import { useGlobalData } from "@/src/context/GlobalContext";
 
 export default function Kits() {
   const [kits, setKits] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const data = useGlobalData();
   useEffect(() => {
     const fetchKits = async () => {
       setLoading(true);
@@ -115,7 +116,9 @@ export default function Kits() {
                       {kit.price}
                     </span>
                     <a
-                      href="#"
+                      href={`${
+                        data.productWhatsAppMessageUrl
+                      }+%20Kit%20Eléctrico+${encodeURIComponent(kit.name)}`}
                       className="font-mono text-[10px] font-bold uppercase text-[#ffb800] hover:text-white"
                     >
                       QUIERO ESTE →
@@ -150,7 +153,7 @@ export default function Kits() {
             </div>
             <div className="relative z-10 pt-4">
               <a
-                href="#"
+                href={`${data.MoreElectricKitsMessageUrl}`}
                 className="flex justify-center font-mono w-full bg-[#ffb800] text-black font-black text-[10px] uppercase py-4 hover:bg-white transition-all"
               >
                 Consultar más kits

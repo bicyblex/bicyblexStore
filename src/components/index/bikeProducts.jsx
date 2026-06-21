@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
+import { useGlobalData } from "@/src/context/GlobalContext";
 
 export default function Products() {
   const [activeAro, setActiveAro] = useState("TODOS");
   const [bikes, setBikes] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const filterOptions = ["TODOS", "12", "16", "20", "24", "26", "27.5", "29"];
-
+  const data = useGlobalData();
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -141,7 +141,11 @@ export default function Products() {
                   </div>
 
                   <a
-                    href="#"
+                    href={`${
+                      data.productWhatsAppMessageUrl
+                    }+${encodeURIComponent(bike.name)}+%20${encodeURIComponent(
+                      `Aro:${bike.aro}`
+                    )}`}
                     className="block text-center border border-[#333535] hover:border-[#ffb800] text-[#d5c4ab] hover:text-[#ffb800] font-bold text-xs uppercase py-4 transition-all tracking-[0.2em]"
                   >
                     LO QUIERO !

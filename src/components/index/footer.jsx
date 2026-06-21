@@ -1,7 +1,9 @@
 import React from "react";
 import { BsInstagram, BsTiktok, BsWhatsapp } from "react-icons/bs";
-
+import { useGlobalData } from "../../context/GlobalContext";
 export default function Footer() {
+  const data = useGlobalData();
+
   return (
     <footer
       className="w-full bg-[#0c0f0f] text-white pt-20 pb-10 border-t-4 border-[#ffb800]"
@@ -20,9 +22,7 @@ export default function Footer() {
 
             <div className="flex items-center gap-5 pt-2 text-[#d5c4ab]">
               {/* Solo los iconos son enlaces */}
-              <a href="mailto:contacto@tuempresa.com" className="text-xs">
-                bicyblex@gmail.com
-              </a>
+              <p className="text-xs">bicyblex@gmail.com</p>
             </div>
           </div>
 
@@ -61,17 +61,26 @@ export default function Footer() {
               productos.
             </p>
             <div className="flex gap-4">
-              <a href="https://tiktok.com" className="text-[#ffb800] text-2xl">
+              <a
+                href={data.tiktokLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#ffb800] text-2xl"
+              >
                 <BsTiktok />
               </a>
               <a
-                href="https://instagram.com"
+                href={data.instagramLink}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-[#ffb800] text-2xl"
               >
                 <BsInstagram />
               </a>
               <a
-                href="https://wa.me/tu-numero"
+                href={data.defaultWhatsAppMessageUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-[#ffb800] text-2xl"
               >
                 <BsWhatsapp />
