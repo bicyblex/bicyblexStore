@@ -158,6 +158,7 @@ export const ProductForm = ({
                   <input
                     key={f.key}
                     placeholder={f.label}
+                    required
                     value={formData.specs[f.key] || ""}
                     onChange={(e) =>
                       setFormData({

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "../../../lib/supabaseClient";
 import { ProductTable } from "./ProductTable";
 import { ProductForm } from "./ProductForm";
-import { FiX } from "react-icons/fi";
+import { convertToWebP } from "../../../utils/imageUtils";
+import { FiPlus, FiX } from "react-icons/fi";
 
 export const ProductManager = () => {
   const [products, setProducts] = useState([]);
@@ -16,6 +17,44 @@ export const ProductManager = () => {
     categoryId: "",
     specs: {},
   });
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [page, setPage] = useState(0);
+  const pageSize = 10;
+
+  // Filtrado local
+
+  const filteredProducts = products.filter((p) => {
+    const term = searchTerm.toLowerCase();
+
+    // Convertimos todos los valores a string para buscar "parecidos" en todos los campos
+    const nameMatch = p.name?.toLowerCase().includes(term);
+    const idMatch = p.id?.toString().includes(term);
+    const priceMatch = p.price?.toString().includes(term); // Buscamos si el precio contiene el texto
+    const categoryMatch = p.categories?.name?.toLowerCase().includes(term);
+
+    // Búsqueda general: Si coincide en cualquiera de los campos anteriores
+    const matchesSearch = nameMatch || idMatch || priceMatch || categoryMatch;
+
+    // Filtro por Categoría (el select)
+    const matchesCat =
+      categoryFilter === "all" || p.category_id?.toString() === categoryFilter;
+
+    // El producto debe cumplir la búsqueda general Y el filtro de categoría
+    return matchesSearch && matchesCat;
+  });
+  // Paginación local
+  const paginatedProducts = filteredProducts.slice(
+    page * pageSize,
+    (page + 1) * pageSize
+  );
+  const totalPages = Math.ceil(filteredProducts.length / pageSize);
+
+  // Resetear página al filtrar
+  useEffect(() => {
+    setPage(0);
+  }, [searchTerm, categoryFilter]);
 
   useEffect(() => {
     loadData();
@@ -35,22 +74,32 @@ export const ProductManager = () => {
 
     // 1. Subir imagen si existe un archivo nuevo
     if (payload.imageFile) {
-      const file = payload.imageFile;
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Math.random()}.${fileExt}`;
+      try {
+        // Convertimos el archivo original a WebP antes de subirlo
+        const webpFile = await convertToWebP(payload.imageFile);
 
-      const { data, error } = await supabase.storage
-        .from("products") // Asegúrate de que este bucket exista en Supabase
-        .upload(fileName, file);
+        // Usamos .webp como extensión fija
+        const fileName = `${Date.now()}_${Math.random()
+          .toString(36)
+          .substring(7)}.webp`;
 
-      if (error) throw error;
+        const { data, error } = await supabase.storage
+          .from("products")
+          .upload(fileName, webpFile); // Subimos el nuevo archivo optimizado
 
-      // Obtener URL pública
-      const { data: publicUrlData } = supabase.storage
-        .from("products")
-        .getPublicUrl(fileName);
+        if (error) throw error;
 
-      imageUrl = publicUrlData.publicUrl;
+        // Obtener URL pública
+        const { data: publicUrlData } = supabase.storage
+          .from("products")
+          .getPublicUrl(fileName);
+
+        imageUrl = publicUrlData.publicUrl;
+      } catch (error) {
+        console.error("Error al procesar/subir la imagen:", error);
+        alert("Hubo un error al procesar la imagen. Inténtalo de nuevo.");
+        return; // Detenemos la ejecución si la imagen falla
+      }
     }
 
     // 2. Guardar en la base de datos
@@ -60,7 +109,7 @@ export const ProductManager = () => {
       stock: parseInt(payload.stock) || 0,
       category_id: parseInt(payload.categoryId),
       specs: payload.specs || {},
-      image: imageUrl, // Aquí guardamos la URL de la imagen
+      image: imageUrl, // Aquí guardamos la URL pública (original o la nueva en webp)
       tag: payload.tag || "general",
     };
 
@@ -85,24 +134,41 @@ export const ProductManager = () => {
   };
   return (
     <>
-      <button
-        onClick={() => {
-          setFormData({
-            id: null,
-            name: "",
-            price: "",
-            categoryId: "",
-            specs: {},
-          });
-          setIsOpen(true);
-        }}
-        className="bg-[#ffb800] px-6 py-3 font-bold text-black mb-6 uppercase text-xs"
-      >
-        + Nuevo Producto
-      </button>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6">
+        <div>
+          <span className="font-mono text-[#ffb800] text-[10px] font-bold tracking-widest uppercase block">
+            Manten tu inventario al día
+          </span>
+          <h3 className="text-xl font-black uppercase mt-1">Productos </h3>
+        </div>
+        <button
+          onClick={() => {
+            setFormData({
+              id: null,
+              name: "",
+              price: "",
+              categoryId: "",
+              specs: {},
+            });
+            setIsOpen(true);
+          }}
+          className="font-mono flex items-center justify-center gap-2 bg-[#ffb800] text-black font-bold text-xs uppercase tracking-wider px-6 py-4 transition-all duration-300 hover:bg-white cursor-pointer"
+        >
+          + Publicar Nuevo Producto
+        </button>
+      </div>
 
       <ProductTable
-        products={products}
+        products={paginatedProducts}
+        categories={categories}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        categoryFilter={categoryFilter}
+        setCategoryFilter={setCategoryFilter}
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+        // PASA LA FUNCIÓN REAL AQUÍ:
         onEdit={(p) => {
           setFormData({ ...p, categoryId: p.category_id?.toString() });
           setIsOpen(true);
@@ -111,6 +177,27 @@ export const ProductManager = () => {
         onViewDetail={handleViewDetail}
       />
 
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-4 mt-6">
+          <button
+            disabled={page === 0}
+            onClick={() => setPage(page - 1)}
+            className="p-2 border border-[#333535] text-xs"
+          >
+            ANTERIOR
+          </button>
+          <span className="p-2 text-xs font-mono">
+            Pág {page + 1} de {totalPages}
+          </span>
+          <button
+            disabled={page >= totalPages - 1}
+            onClick={() => setPage(page + 1)}
+            className="p-2 border border-[#333535] text-xs"
+          >
+            SIGUIENTE
+          </button>
+        </div>
+      )}
       {isOpen && (
         <ProductForm
           formData={formData}

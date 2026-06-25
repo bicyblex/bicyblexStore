@@ -1,106 +1,136 @@
 import React from "react";
-import { FiTrash2, FiEdit2, FiEye } from "react-icons/fi"; // 1. Importado FiEye
+import { FiTrash2, FiEdit2, FiEye } from "react-icons/fi";
 
-export const ProductTable = (
-  { products, onEdit, onDelete, onViewDetail, loading } // 2. Agregado onViewDetail
-) => (
-  <div className="bg-[#080a0a] border border-[#333535]/20 overflow-x-auto">
-    {loading ? (
-      <div className="p-10 text-center font-mono text-xs text-gray-500 uppercase tracking-widest">
-        Sincronizando índices del sistema...
-      </div>
-    ) : products.length === 0 ? (
-      <div className="p-10 text-center font-mono text-xs text-gray-500 uppercase tracking-widest">
-        No hay productos registrados.
-      </div>
-    ) : (
-      <table className="w-full text-left border-collapse min-w-[800px]">
-        <thead>
-          <tr className="border-b border-[#333535]/30 bg-[#0d1010]">
-            <th className="font-mono text-[10px] text-gray-500 uppercase tracking-wider p-4">
-              ID
-            </th>
-            <th className="font-mono text-[10px] text-gray-500 uppercase tracking-wider p-4">
-              Producto
-            </th>
-            <th className="font-mono text-[10px] text-gray-500 uppercase tracking-wider p-4">
-              Categoría
-            </th>
-            <th className="font-mono text-[10px] text-gray-500 uppercase tracking-wider p-4">
-              Precio
-            </th>
-            <th className="font-mono text-[10px] text-gray-500 uppercase tracking-wider p-4">
-              Stock
-            </th>
-            <th className="font-mono text-[10px] text-gray-500 uppercase tracking-wider p-4">
-              Especificaciones
-            </th>
-            <th className="font-mono text-[10px] text-gray-500 uppercase tracking-wider p-4 text-right">
-              Acciones
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-[#333535]/10">
-          {products.map((item) => (
-            <tr
-              key={item.id}
-              className="hover:bg-[#111414]/40 transition-colors"
-            >
-              <td className="font-mono text-xs text-gray-500 p-4">
-                #{item.id}
-              </td>
-              <td className="text-sm font-bold p-4 uppercase tracking-wide">
-                {item.name}
-              </td>
-              <td className="font-mono text-xs text-[#ffb800]/80 p-4">
-                {item.categories?.name || "Sin categoría"}
-              </td>
-              <td className="text-sm p-4">${item.price}</td>
-              <td className="text-sm p-4">{item.stock || 0}</td>
-              <td className="p-4">
-                <div className="bg-[#0c0f0f] border border-[#333535] p-2 rounded text-[10px] space-y-1 max-w-[200px]">
-                  {item.specs &&
-                    Object.entries(item.specs).map(([key, value]) => (
-                      <div key={key} className="flex justify-between gap-4">
-                        <span className="text-gray-500 capitalize">{key}:</span>
-                        <span className="text-white">{value}</span>
-                      </div>
-                    ))}
-                  {(!item.specs || Object.keys(item.specs).length === 0) && (
-                    <span className="text-gray-700 italic">Sin specs</span>
-                  )}
-                </div>
-              </td>
-              <td className="p-4 text-right">
-                <div className="flex justify-end gap-2">
-                  {/* 3. Botón de Ver Detalle */}
-                  <button
-                    onClick={() => onViewDetail(item)}
-                    className="p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-blue-400 hover:border-blue-400 transition-colors"
-                    title="Ver Detalle"
-                  >
-                    <FiEye size={14} />
-                  </button>
-                  <button
-                    onClick={() => onEdit(item)}
-                    className="p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-[#ffb800] hover:border-[#ffb800] transition-colors"
-                    title="Modificar"
-                  >
-                    <FiEdit2 size={14} />
-                  </button>
-                  <button
-                    onClick={() => onDelete(item.id)}
-                    className="p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-red-500 hover:border-red-500 transition-colors"
-                    title="Eliminar"
-                  >
-                    <FiTrash2 size={14} />
-                  </button>
-                </div>
-              </td>
+export const ProductTable = ({
+  products,
+  onEdit,
+  onDelete,
+  onViewDetail,
+  loading,
+  // Nuevas props para la lógica
+  totalPages,
+  page,
+  setPage,
+  searchTerm,
+  setSearchTerm,
+  categoryFilter,
+  setCategoryFilter,
+  categories,
+}) => (
+  <div className="space-y-4">
+    {/* Controles integrados en la tabla */}
+    <div className="flex gap-4 mb-4  justify-between">
+      <input
+        placeholder="BUSCAR PRODUCTO..."
+        className="font-mono bg-[#080a0a] border border-[#333535] p-3 text-xs text-white w-64 uppercase outline-none"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <select
+        className="bg-[#080a0a] border border-[#333535] p-3 text-xs text-white w-48 uppercase outline-none"
+        value={categoryFilter}
+        onChange={(e) => setCategoryFilter(e.target.value)}
+      >
+        <option value="all">TODAS LAS CATEGORÍAS</option>
+        {categories.map((c) => (
+          <option key={c.id} value={c.id}>
+            {c.name}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <div className="bg-[#080a0a] border border-[#333535]/20 overflow-x-auto">
+      {loading ? (
+        <div className="p-10 text-center font-mono text-xs text-gray-500 uppercase tracking-widest">
+          Sincronizando...
+        </div>
+      ) : products.length === 0 ? (
+        <div className="p-10 text-center font-mono text-xs text-gray-500 uppercase tracking-widest">
+          No hay resultados.
+        </div>
+      ) : (
+        <table className="w-full text-left border-collapse min-w-[800px]">
+          {/* ... (TU THEAD ES EL MISMO) ... */}
+          <thead>
+            <tr className="border-b border-[#333535]/30 bg-[#0d1010]">
+              <th className="font-mono text-[10px] text-gray-500 p-4">ID</th>
+              <th className="font-mono text-[10px] text-gray-500 p-4">
+                PRODUCTO
+              </th>
+              <th className="font-mono text-[10px] text-gray-500 p-4">
+                CATEGORÍA
+              </th>
+              <th className="font-mono text-[10px] text-gray-500 p-4">
+                PRECIO
+              </th>
+              <th className="font-mono text-[10px] text-gray-500 p-4">STOCK</th>
+              <th className="font-mono text-[10px] text-gray-500 p-4 text-right">
+                ACCIONES
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    )}
+          </thead>
+          <tbody className="divide-y divide-[#333535]/10">
+            {products.map((item) => (
+              <tr key={item.id} className="hover:bg-[#111414]/40">
+                <td className="font-mono text-xs p-4">#{item.id}</td>
+                <td className="text-sm font-bold p-4 uppercase">{item.name}</td>
+                <td className="text-xs p-4 text-[#ffb800]">
+                  {item.categories?.name}
+                </td>
+                <td className="text-sm p-4">${item.price}</td>
+                <td className="text-sm p-4">{item.stock}</td>
+                <td className="p-4 text-right">
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={() => onViewDetail(item)}
+                      className="cursor-pointer p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-white hover:border-white transition-colors"
+                      title="Ver contenido"
+                    >
+                      <FiEye />
+                    </button>
+                    <button
+                      onClick={() => onEdit(item)}
+                      className="cursor-pointer p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-[#ffb800] hover:border-[#ffb800] transition-colors"
+                      title="Editar"
+                    >
+                      <FiEdit2 />
+                    </button>
+                    <button
+                      onClick={() => onDelete(item.id)}
+                      className="cursor-pointer p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-red-500 hover:border-red-500 transition-colors"
+                      title="Eliminar"
+                    >
+                      <FiTrash2 />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+
+    {/* Paginación integrada en el componente */}
+    <div className="flex justify-center gap-4">
+      <button
+        disabled={page === 0}
+        onClick={() => setPage(page - 1)}
+        className="text-[10px] border p-2"
+      >
+        ANTERIOR
+      </button>
+      <span className="text-[10px] p-2 font-mono">
+        PÁGINA {page + 1} de {totalPages || 1}
+      </span>
+      <button
+        disabled={page >= totalPages - 1}
+        onClick={() => setPage(page + 1)}
+        className="text-[10px] border p-2"
+      >
+        SIGUIENTE
+      </button>
+    </div>
   </div>
 );

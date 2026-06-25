@@ -39,11 +39,14 @@ export default function Login() {
     <section className="w-full min-h-screen bg-[#0c0f0f] flex items-center justify-center text-white px-4">
       <div className="w-full max-w-[400px] bg-[#080a0a] border border-[#333535]/30 p-8 md:p-10">
         {/* Encabezado */}
-        <div className="mb-8">
+        <div className="">
+          <a href="#" className="flex items-center shrink-0">
+            <img src="/logo.png" alt="Logo" className="w-32 lg:w-52 h-auto" />
+          </a>
           <span className="font-mono text-[#ffb800] text-[10px] font-bold tracking-[0.3em] uppercase block">
             Control de Sistema
           </span>
-          <h2 className="font-display text-2xl font-black uppercase tracking-wide mt-2">
+          <h2 className="font-display text-2xl font-black uppercase tracking-wide mt-7">
             Iniciar Sesión
           </h2>
         </div>
@@ -52,7 +55,7 @@ export default function Login() {
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label className="font-mono block text-[10px] font-bold uppercase tracking-[0.15em] text-gray-500 mb-2">
-              Email del Operador
+              Email
             </label>
             <input
               type="email"
@@ -66,7 +69,7 @@ export default function Login() {
 
           <div>
             <label className="font-mono block text-[10px] font-bold uppercase tracking-[0.15em] text-gray-500 mb-2">
-              Clave de Acceso
+              Contraseña
             </label>
             <input
               type="password"
@@ -87,9 +90,9 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="font-mono w-full bg-[#ffb800] text-black font-bold text-xs uppercase tracking-[0.15em] py-4 transition-all duration-300 hover:bg-white disabled:opacity-50"
+            className="cursor-pointer font-mono w-full bg-[#ffb800] text-black font-bold text-xs uppercase tracking-[0.15em] py-4 transition-all duration-300 hover:bg-white disabled:opacity-50"
           >
-            {loading ? "VERIFICANDO..." : "ACCEDER AL TERMINAL"}
+            {loading ? "VERIFICANDO..." : "INGRESAR"}
           </button>
         </form>
       </div>

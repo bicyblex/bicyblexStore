@@ -139,7 +139,7 @@ export default function CategoriesForm() {
         </div>
         <button
           onClick={openCreateModal}
-          className="font-mono flex items-center justify-center gap-2 bg-[#ffb800] text-black font-bold text-xs uppercase tracking-wider px-6 py-4 transition-all duration-300 hover:bg-white"
+          className="cursor-pointer font-mono flex items-center justify-center gap-2 bg-[#ffb800] text-black font-bold text-xs uppercase tracking-wider px-6 py-4 transition-all duration-300 hover:bg-white"
         >
           <FiPlus className="text-base" /> AGREGAR CATEGORÍA
         </button>

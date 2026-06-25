@@ -198,7 +198,7 @@ export default function NewsLetterForm() {
         </div>
         <button
           onClick={openCreateModal}
-          className="font-mono flex items-center justify-center gap-2 bg-[#ffb800] text-black font-bold text-xs uppercase tracking-wider px-6 py-4 transition-all duration-300 hover:bg-white"
+          className="cursor-pointer font-mono flex items-center justify-center gap-2 bg-[#ffb800] text-black font-bold text-xs uppercase tracking-wider px-6 py-4 transition-all duration-300 hover:bg-white"
         >
           <FiPlus className="text-base" /> PUBLICAR NUEVA NOTICIA
         </button>
@@ -253,21 +253,21 @@ export default function NewsLetterForm() {
                     <div className="flex justify-end gap-2">
                       <button
                         onClick={() => openViewModal(item)}
-                        className="p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-white hover:border-white transition-colors"
+                        className="cursor-pointer p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-white hover:border-white transition-colors"
                         title="Ver contenido"
                       >
                         <FiEye size={14} />
                       </button>
                       <button
                         onClick={() => openEditModal(item)}
-                        className="p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-[#ffb800] hover:border-[#ffb800] transition-colors"
+                        className="cursor-pointer p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-[#ffb800] hover:border-[#ffb800] transition-colors"
                         title="Editar"
                       >
                         <FiEdit2 size={14} />
                       </button>
                       <button
                         onClick={() => openDeleteModal(item)}
-                        className="p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-red-500 hover:border-red-500 transition-colors"
+                        className="cursor-pointer p-2 bg-[#111414] border border-[#333535]/40 text-gray-400 hover:text-red-500 hover:border-red-500 transition-colors"
                         title="Eliminar"
                       >
                         <FiTrash2 size={14} />
