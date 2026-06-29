@@ -287,7 +287,7 @@ export default function NewsLetterForm() {
           <div className="bg-[#080a0a] border border-[#333535]/40 w-full max-w-[650px] max-h-[90vh] overflow-y-auto p-8 relative">
             <button
               onClick={() => setIsFormModalOpen(false)}
-              className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
+              className="cursor-pointer absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
             >
               <FiX size={20} />
             </button>
@@ -349,11 +349,11 @@ export default function NewsLetterForm() {
               <button
                 type="submit"
                 disabled={actionLoading}
-                className="font-mono w-full bg-[#ffb800] text-black font-bold text-xs uppercase py-4 tracking-widest transition-all hover:bg-white disabled:opacity-50"
+                className="cursor-pointer font-mono w-full bg-[#ffb800] text-black font-bold text-xs uppercase py-4 tracking-widest transition-all hover:bg-white disabled:opacity-50"
               >
                 {actionLoading
-                  ? "TRANSMITIENDO DATOS..."
-                  : "PUBLICAR EN LA RED"}
+                  ? "GUARDANDO INFORMACIÓN..."
+                  : "PUBLICAR EN LA WEB"}
               </button>
             </form>
           </div>
@@ -366,13 +366,13 @@ export default function NewsLetterForm() {
           <div className="bg-[#080a0a] border border-[#333535]/40 w-full max-w-[550px] max-h-[85vh] overflow-y-auto p-8 relative">
             <button
               onClick={() => setIsViewModalOpen(false)}
-              className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
+              className="cursor-pointer absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
             >
               <FiX size={20} />
             </button>
 
             <span className="font-mono text-[#ffb800] text-[10px] font-bold uppercase tracking-widest block">
-              // Vista de Lectura
+              // Vista de la noticia
             </span>
             <h3 className="text-xl font-black uppercase mt-1 mb-4 border-b border-[#333535]/20 pb-2 leading-tight">
               {selectedNews.title}
@@ -420,14 +420,14 @@ export default function NewsLetterForm() {
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="font-mono border border-[#333535]/40 text-gray-400 hover:bg-[#111414] hover:text-white text-xs uppercase py-3"
+                className="cursor-pointer font-mono border border-[#333535]/40 text-gray-400 hover:bg-[#111414] hover:text-white text-xs uppercase py-3"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleDeleteNews}
                 disabled={actionLoading}
-                className="font-mono bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase py-3 disabled:opacity-50"
+                className="cursor-pointer font-mono bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase py-3 disabled:opacity-50"
               >
                 {actionLoading ? "PROCESANDO..." : "SÍ, ELIMINAR"}
               </button>

@@ -219,14 +219,14 @@ export default function CategoriesForm() {
           <div className="bg-[#080a0a] border border-[#333535]/40 w-full max-w-[450px] p-8 relative">
             <button
               onClick={() => setIsFormModalOpen(false)}
-              className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
+              className="cursor-pointer absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
             >
               <FiX size={20} />
             </button>
 
             <div className="mb-6">
               <span className="font-mono text-[#ffb800] text-[10px] font-bold tracking-widest uppercase block">
-                // Terminal de Indexación
+                Crea una nueva categoria
               </span>
               <h3 className="text-lg font-bold uppercase mt-1">
                 {modalMode === "create"
@@ -256,7 +256,7 @@ export default function CategoriesForm() {
               <button
                 type="submit"
                 disabled={actionLoading}
-                className="font-mono w-full bg-[#ffb800] text-black font-bold text-xs uppercase py-4 tracking-widest transition-all hover:bg-white disabled:opacity-50"
+                className="cursor-pointer font-mono w-full bg-[#ffb800] text-black font-bold text-xs uppercase py-4 tracking-widest transition-all hover:bg-white disabled:opacity-50"
               >
                 {actionLoading ? "REGISTRANDO..." : "GUARDAR CATEGORÍA"}
               </button>

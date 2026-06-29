@@ -42,14 +42,14 @@ export const ProductForm = ({
         {/* Botón Cerrar */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
+          className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors cursor-pointer"
         >
           <FiX size={20} />
         </button>
 
         <div className="mb-6">
           <span className="font-mono text-[#ffb800] text-[10px] font-bold tracking-widest uppercase block">
-            // Terminal de Gestión de Inventario
+            Gestiona tu inventario
           </span>
           <h3 className="text-lg font-bold uppercase mt-1">
             {formData.id ? "Modificar Producto" : "Registrar Nuevo Producto"}
@@ -175,7 +175,7 @@ export const ProductForm = ({
 
           <button
             type="submit"
-            className="font-mono w-full bg-[#ffb800] text-black font-bold text-xs uppercase py-4 mt-2 tracking-widest transition-all hover:bg-white"
+            className="cursor-pointer font-mono w-full bg-[#ffb800] text-black font-bold text-xs uppercase py-4 mt-2 tracking-widest transition-all hover:bg-white"
           >
             Guardar en el sistema
           </button>

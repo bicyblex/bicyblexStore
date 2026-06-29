@@ -78,7 +78,7 @@ export const ProductTable = ({
                 <td className="text-xs p-4 text-[#ffb800]">
                   {item.categories?.name}
                 </td>
-                <td className="text-sm p-4">${item.price}</td>
+                <td className="text-sm p-4">s/{item.price}</td>
                 <td className="text-sm p-4">{item.stock}</td>
                 <td className="p-4 text-right">
                   <div className="flex justify-end gap-2">

@@ -11,6 +11,34 @@ export default function DashboardCentral() {
   const [user, setUser] = useState(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [activeTab, setActiveTab] = useState("products");
+
+  const TABS = [
+    {
+      id: "products",
+      label: "PRODUCTOS",
+      component: <ProductManager />,
+      title: "Gestión de Productos",
+      visible: true,
+    },
+    {
+      id: "news",
+      label: "NOTICIAS",
+      component: <NewsletterForm />,
+      title: "Módulo de Noticias",
+      visible: true,
+    },
+    {
+      id: "categories",
+      label: "CATEGORÍAS",
+      component: <CategoryManager />,
+      title: "Categorías del Sistema",
+      visible: false,
+    },
+    // Si quieres ocultar una, solo cambia visible: false
+  ];
+
+  // Filtramos las pestañas visibles para el menú y el renderizado
+  const visibleTabs = TABS.filter((tab) => tab.visible);
   const router = useRouter();
 
   useEffect(() => {
@@ -67,12 +95,8 @@ export default function DashboardCentral() {
               </span>
             </div>
 
-            <nav className="flex flex-col ">
-              {[
-                { id: "products", label: "PRODUCTOS" },
-                { id: "news", label: "NOTICIAS" },
-                { id: "categories", label: "CATEGORÍAS" },
-              ].map((tab) => (
+            <nav className="flex flex-col">
+              {visibleTabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
@@ -90,7 +114,7 @@ export default function DashboardCentral() {
 
           <button
             onClick={handleLogout}
-            className="font-mono border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-black font-bold text-[10px] uppercase tracking-widest p-3 transition-all w-full"
+            className="cursor-pointer font-mono border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-black font-bold text-[10px] uppercase tracking-widest p-3 transition-all w-full"
           >
             Cerrar sesión
           </button>
@@ -99,29 +123,16 @@ export default function DashboardCentral() {
         {/* 3. Contenido derecho: overflow-y-auto hace que SOLO esta parte tenga scroll */}
         <main className="flex-grow p-10 overflow-y-auto scrollbar-thin">
           <div className="max-w-[1400px] mx-auto">
-            {activeTab === "products" && (
-              <div className="space-y-6">
-                <h2 className="font-display text-2xl font-black uppercase">
-                  Gestión de Productos
-                </h2>
-                <ProductManager />
-              </div>
-            )}
-            {activeTab === "news" && (
-              <div className="space-y-6">
-                <h2 className="font-display text-2xl font-black uppercase">
-                  Módulo de Noticias
-                </h2>
-                <NewsletterForm />
-              </div>
-            )}
-            {activeTab === "categories" && (
-              <div className="space-y-6">
-                <h2 className="font-display text-2xl font-black uppercase">
-                  Categorías del Sistema
-                </h2>
-                <CategoryManager />
-              </div>
+            {visibleTabs.map(
+              (tab) =>
+                activeTab === tab.id && (
+                  <div key={tab.id} className="space-y-6">
+                    <h2 className="font-display text-2xl font-black uppercase">
+                      {tab.title}
+                    </h2>
+                    {tab.component}
+                  </div>
+                )
             )}
           </div>
         </main>

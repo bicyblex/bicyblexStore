@@ -213,7 +213,7 @@ export const ProductManager = () => {
             {/* Botón Cerrar */}
             <button
               onClick={() => setDetailProduct(null)}
-              className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
+              className="cursor-pointer absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
             >
               <FiX size={20} />
             </button>
@@ -303,9 +303,9 @@ export const ProductManager = () => {
 
             <button
               onClick={() => setDetailProduct(null)}
-              className="font-mono w-full bg-[#333535] text-white text-xs uppercase py-4 mt-6 tracking-widest transition-all hover:bg-[#ffb800] hover:text-black"
+              className="cursor-pointer font-mono w-full bg-[#333535] text-white text-xs uppercase py-4 mt-6 tracking-widest transition-all hover:bg-[#ffb800] hover:text-black"
             >
-              Cerrar Terminal
+              Cerrar
             </button>
           </div>
         </div>
