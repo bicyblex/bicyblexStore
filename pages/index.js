@@ -19,6 +19,7 @@ export default function Home() {
           name="description"
           content="Discover our range of electric bike kits to convert your bike into an electric one. Easy installation, powerful performance, and eco-friendly transportation. Shop now!"
         />
+        <link rel="icon" href="/favicon.png" />
       </Head>
 
       <div>

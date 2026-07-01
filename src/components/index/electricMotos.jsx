@@ -123,6 +123,8 @@ export default function ElectricMotos() {
                         " " +
                         encodeURIComponent(moto.motor)
                       }`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex justify-center font-mono w-full bg-transparent border border-[#ffb800] text-[#ffb800] group-hover:bg-[#ffb800] group-hover:text-black font-bold text-xs uppercase tracking-[0.2em] py-4 transition-all duration-300"
                     >
                       Ordenar Ahora

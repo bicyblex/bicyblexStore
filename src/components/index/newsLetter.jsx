@@ -40,7 +40,7 @@ export default function NewsLetter() {
   if (loading)
     return (
       <div className="text-white text-center py-20 font-mono">
-        INICIALIZANDO RADAR...
+        INICIALIZANDO NOTICIAS...
       </div>
     );
   if (slides.length === 0) return null;
@@ -52,7 +52,7 @@ export default function NewsLetter() {
         <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#333535]/20 pb-8 mb-10 gap-6">
           <div>
             <span className="font-mono text-[#ffb800] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase">
-              RADAR DE OPERACIONES
+              NOTICIAS RECIENTES
             </span>
             <h2 className="font-display text-4xl sm:text-5xl font-black uppercase tracking-normal leading-[0.95] mt-3">
               NOTICIAS & EVENTOS
@@ -123,6 +123,8 @@ export default function NewsLetter() {
                     data.newsLetterWhatsAppMessageUrl
                   }+${encodeURIComponent(slide.title)}`}
                   className="font-mono inline-block border border-[#ffb800] text-[#ffb800] hover:bg-[#ffb800] hover:text-black text-xs font-bold uppercase tracking-[0.2em] py-3 px-6 transition-all"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   PREGUNTAR POR WHATSAPP →
                 </a>

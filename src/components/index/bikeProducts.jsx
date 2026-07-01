@@ -81,7 +81,7 @@ export default function Products() {
             <button
               key={option}
               onClick={() => setActiveAro(option)}
-              className={`font-mono py-3 text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] border transition-all duration-200
+              className={`cursor-pointer font-mono py-3 text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] border transition-all duration-200
                 ${
                   activeAro === option
                     ? "bg-[#ffb800] text-black border-[#ffb800]"
@@ -146,6 +146,8 @@ export default function Products() {
                     }+${encodeURIComponent(bike.name)}+%20${encodeURIComponent(
                       `Aro:${bike.aro}`
                     )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="block text-center border border-[#333535] hover:border-[#ffb800] text-[#d5c4ab] hover:text-[#ffb800] font-bold text-xs uppercase py-4 transition-all tracking-[0.2em]"
                   >
                     LO QUIERO !

@@ -119,6 +119,8 @@ export default function Kits() {
                       href={`${
                         data.productWhatsAppMessageUrl
                       }+%20Kit%20Eléctrico+${encodeURIComponent(kit.name)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="font-mono text-[10px] font-bold uppercase text-[#ffb800] hover:text-white"
                     >
                       QUIERO ESTE →
@@ -155,6 +157,8 @@ export default function Kits() {
               <a
                 href={`${data.MoreElectricKitsMessageUrl}`}
                 className="flex justify-center font-mono w-full bg-[#ffb800] text-black font-black text-[10px] uppercase py-4 hover:bg-white transition-all"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 Consultar más kits
               </a>
