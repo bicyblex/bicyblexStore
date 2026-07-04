@@ -6,10 +6,12 @@ export default function TopNav() {
   const data = useGlobalData();
   const navLinks = [
     { name: "Bicicletas", href: "#Bicicletas" },
+    { name: "Accesorios", href: "#Accesorios" },
     { name: "Motos", href: "#Motos-electricas" },
     { name: "Kits", href: "#Kits-electricos" },
-    { name: "Nosotros", href: "#Nosotros" },
-    { name: "Contáctanos", href: "#Contáctanos" },
+
+    { name: "Mantenimi.", href: "#Mantenimiento" },
+    { name: "Dudas", href: "#Dudas" },
   ];
 
   return (
@@ -27,7 +29,7 @@ export default function TopNav() {
               <li key={link.name} className="h-full flex items-center">
                 <a
                   href={link.href}
-                  className="font-mono text-[#d5c4ab] px-5 hover:text-[#ffb800] font-bold tracking-[0.2em] text-xs uppercase transition-colors h-full flex items-center border-b-2 border-transparent hover:border-[#ffb800]"
+                  className="font-mono text-[#d5c4ab] px-3 hover:text-[#ffb800] font-bold tracking-[0.2em] text-xs uppercase transition-colors h-full flex items-center border-b-2 border-transparent hover:border-[#ffb800]"
                 >
                   {link.name}
                 </a>

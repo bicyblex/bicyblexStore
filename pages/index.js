@@ -1,3 +1,6 @@
+import Head from "next/head";
+import { GlobalProvider } from "@/src/context/GlobalContext";
+
 import Topnav from "@/src/components/index/topnav";
 import Hero from "@/src/components/index/hero";
 import Products from "@/src/components/index/bikeProducts";
@@ -6,8 +9,10 @@ import ElectricKits from "@/src/components/index/electricKits";
 import Features from "@/src/components/index/features";
 import Footer from "@/src/components/index/footer";
 import NewsLetter from "@/src/components/index/newsLetter";
-import Head from "next/head";
-import { GlobalProvider } from "@/src/context/GlobalContext";
+import FAQ from "@/src/components/index/FAQ";
+import Maintenance from "@/src/components/index/maintenance";
+import Accesorios from "@/src/components/index/Accesories";
+
 export default function Home() {
   return (
     <GlobalProvider>
@@ -19,7 +24,7 @@ export default function Home() {
           name="description"
           content="Discover our range of electric bike kits to convert your bike into an electric one. Easy installation, powerful performance, and eco-friendly transportation. Shop now!"
         />
-        <link rel="icon" href="/favicon.png" />
+        <link rel="icon" href="/bicyblex_favicon.png" />
       </Head>
 
       <div>
@@ -27,8 +32,11 @@ export default function Home() {
         <Hero />
         <NewsLetter />
         <Products />
+        <Accesorios />
         <ElectricMotos />
         <ElectricKits />
+        <Maintenance />
+        <FAQ />
         <Features />
         <Footer />
       </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { BsInstagram, BsTiktok, BsWhatsapp } from "react-icons/bs";
+import { BsFacebook, BsInstagram, BsTiktok, BsWhatsapp } from "react-icons/bs";
 import { useGlobalData } from "../../context/GlobalContext";
 export default function Footer() {
   const data = useGlobalData();
@@ -61,6 +61,14 @@ export default function Footer() {
               productos.
             </p>
             <div className="flex gap-4">
+              <a
+                href={data.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#ffb800] text-2xl"
+              >
+                <BsFacebook />
+              </a>
               <a
                 href={data.tiktokLink}
                 target="_blank"
