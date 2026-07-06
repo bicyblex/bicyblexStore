@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { useGlobalData } from "@/src/context/GlobalContext";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { FiX } from "react-icons/fi";
 
 export default function Accesories() {
   const [accesorios, setAccesorios] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedAcc, setSelectedAcc] = useState(null);
   const data = useGlobalData();
 
   useEffect(() => {
@@ -16,10 +23,8 @@ export default function Accesories() {
       const { data, error } = await supabase
         .from("products")
         .select("*, categories(name)");
-
       if (error) throw error;
 
-      // Filtro específico para la categoría de accesorios
       const filtered = data.filter(
         (item) => item.categories?.name === "Accesorios"
       );
@@ -29,16 +34,17 @@ export default function Accesories() {
         tag: item.tag || "ACCESORIO",
         name: item.name,
         price: `s/${item.price}`,
-        image: item.image,
-        // Aquí puedes ajustar los campos si tus accesorios tienen otras specs
-        info1: item.specs?.dato1 || "N/A",
-        info2: item.specs?.dato2 || "Universal",
-        info3: item.specs?.dato3 || "N/A",
+        image: Array.isArray(item.image)
+          ? item.image
+          : [item.image].filter(Boolean),
+        info1: item.specs?.["Dato 1"] || "N/A",
+        info2: item.specs?.["Dato 2"] || "Universal",
+        info3: item.specs?.["Dato 3"] || "N/A",
       }));
 
       setAccesorios(formatted);
     } catch (error) {
-      console.error("Error al cargar accesorios:", error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
@@ -50,6 +56,7 @@ export default function Accesories() {
       id="Accesorios"
     >
       <div className="max-w-[1920px] m-auto w-[90%]">
+        {/* CABECERA */}
         <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#333535]/20 pb-8 mb-16">
           <div>
             <span className="font-mono text-[#ffb800] text-xs font-bold tracking-[0.3em] uppercase">
@@ -72,25 +79,35 @@ export default function Accesories() {
                 key={acc.id}
                 className="bg-[#080a0a] border border-[#333535]/20 flex flex-col justify-between group"
               >
-                <div className="relative w-full h-[260px] bg-[#111414] overflow-hidden">
+                {/* IMAGEN CON HOVER Y BOTÓN */}
+                <div className="relative w-full h-[260px] bg-[#111414] overflow-hidden group">
                   <img
-                    src={acc.image}
+                    src={acc.image?.[0]}
                     alt={acc.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
+
                   <div className="font-mono absolute top-4 left-4 bg-[#ffb800] text-black text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1">
                     {acc.tag}
+                  </div>
+
+                  <div
+                    onClick={() => setSelectedAcc(acc)}
+                    className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer z-10"
+                  >
+                    <button className="bg-[#ffb800] px-6 py-3 text-black font-bold text-xs uppercase hover:bg-white transition-colors pointer-events-none">
+                      VER MÁS (+)
+                    </button>
                   </div>
                 </div>
 
                 <div className="p-6 md:p-8 flex flex-col flex-grow justify-between">
                   <div>
-                    <h3 className="font-display text-2xl font-black uppercase tracking-wide flex items-baseline gap-x-2">
+                    <h3 className="flex justify-between font-display text-2xl font-black uppercase tracking-wide items-baseline gap-x-2">
                       <span className="text-white">{acc.name}</span>
                       <span className="text-[#ffb800]">{acc.price}</span>
                     </h3>
 
-                    {/* Fila de especificaciones adaptada */}
                     <div className="mt-8 grid grid-cols-3 gap-2 border-t border-b border-[#333535]/20 py-4 font-mono">
                       <div className="text-center border-r border-[#333535]/20">
                         <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-[0.15em]">
@@ -137,6 +154,39 @@ export default function Accesories() {
           </div>
         )}
       </div>
+
+      {/* MODAL CON SWIPER */}
+      {selectedAcc && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+          <div className="bg-[#080a0a] border border-[#333535] w-full max-w-[600px] p-8 relative">
+            <button
+              onClick={() => setSelectedAcc(null)}
+              className="cursor-pointer absolute top-4 right-4 z-10 text-white hover:text-[#ffb800]"
+            >
+              <FiX size={24} />
+            </button>
+            <h3 className="font-mono text-xl font-bold uppercase mb-6">
+              {selectedAcc.name}
+            </h3>
+            <Swiper
+              modules={[Navigation, Pagination]}
+              navigation
+              pagination={{ clickable: true }}
+              className="w-full h-[350px]"
+            >
+              {selectedAcc.image?.map((img, i) => (
+                <SwiperSlide key={i}>
+                  <img
+                    src={img}
+                    alt={selectedAcc.name}
+                    className="w-full h-full object-contain"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

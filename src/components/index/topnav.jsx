@@ -10,8 +10,8 @@ export default function TopNav() {
     { name: "Motos", href: "#Motos-electricas" },
     { name: "Kits", href: "#Kits-electricos" },
 
-    { name: "Mantenimi.", href: "#Mantenimiento" },
-    { name: "Dudas", href: "#Dudas" },
+    { name: "Mantenimiento", href: "#Mantenimiento" },
+    { name: "Preguntas frecuentes", href: "#Dudas" },
   ];
 
   return (
@@ -19,7 +19,7 @@ export default function TopNav() {
       <div className="max-w-[1920px] m-auto w-[90%] h-[88px] flex items-center justify-between">
         {/* LOGO */}
         <a href="#" className="flex items-center shrink-0">
-          <img src="/logo.png" alt="Logo" className="w-32 lg:w-52 h-auto" />
+          <img src="/logo.png" alt="Logo" className="w-32 lg:w-42 h-auto" />
         </a>
 
         {/* MENÚ DESKTOP */}
@@ -43,9 +43,9 @@ export default function TopNav() {
           <a
             href={`${data.defaultWhatsAppMessageUrl}`}
             target="_blank"
-            className="flex items-center gap-2 font-mono text-[#d5c4ab] hover:text-[#ffb800] font-bold tracking-[0.2em] text-xs uppercase transition-colors border-l border-[#333535]/30 pl-4 lg:pl-10"
+            className="flex items-center gap-2 font-mono text-[#d5c4ab] hover:text-[#ffb800] font-bold tracking-[0.2em] text-xs uppercase transition-colors border-l border-[#333535]/30 pl-4 "
           >
-            <span className="text-2xl lg:text-4xl">
+            <span className="text-xl lg:text-4xl">
               <FaWhatsapp />
             </span>
             <span className="hidden sm:inline">Whatsapp</span>

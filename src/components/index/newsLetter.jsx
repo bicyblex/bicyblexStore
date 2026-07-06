@@ -75,7 +75,7 @@ export default function NewsLetter() {
                       : prev + 1
                   )
                 }
-                className="border border-[#333535] p-3 hover:border-[#ffb800] hover:text-[#ffb800] transition-colors"
+                className="cursor-pointer border border-[#333535] p-3 hover:border-[#ffb800] hover:text-[#ffb800] transition-colors"
               >
                 <svg
                   className="w-5 h-5"

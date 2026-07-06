@@ -10,12 +10,14 @@ export const ProductManager = () => {
   const [categories, setCategories] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [detailProduct, setDetailProduct] = useState(null); // Nuevo estado
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
     id: null,
     name: "",
     price: "",
     categoryId: "",
     specs: {},
+    image: [],
   });
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,35 +29,24 @@ export const ProductManager = () => {
 
   const filteredProducts = products.filter((p) => {
     const term = searchTerm.toLowerCase();
-
-    // Convertimos todos los valores a string para buscar "parecidos" en todos los campos
     const nameMatch = p.name?.toLowerCase().includes(term);
     const idMatch = p.id?.toString().includes(term);
-    const priceMatch = p.price?.toString().includes(term); // Buscamos si el precio contiene el texto
     const categoryMatch = p.categories?.name?.toLowerCase().includes(term);
-
-    // Búsqueda general: Si coincide en cualquiera de los campos anteriores
-    const matchesSearch = nameMatch || idMatch || priceMatch || categoryMatch;
-
-    // Filtro por Categoría (el select)
-    const matchesCat =
-      categoryFilter === "all" || p.category_id?.toString() === categoryFilter;
-
-    // El producto debe cumplir la búsqueda general Y el filtro de categoría
-    return matchesSearch && matchesCat;
+    return (
+      (nameMatch || idMatch || categoryMatch) &&
+      (categoryFilter === "all" || p.category_id?.toString() === categoryFilter)
+    );
   });
-  // Paginación local
+
   const paginatedProducts = filteredProducts.slice(
     page * pageSize,
     (page + 1) * pageSize
   );
   const totalPages = Math.ceil(filteredProducts.length / pageSize);
 
-  // Resetear página al filtrar
   useEffect(() => {
     setPage(0);
   }, [searchTerm, categoryFilter]);
-
   useEffect(() => {
     loadData();
   }, []);
@@ -65,51 +56,62 @@ export const ProductManager = () => {
       .from("products")
       .select("*, categories(name)");
     const { data: c } = await supabase.from("categories").select("*");
-    setProducts(p || []);
+    // Aseguramos que 'image' siempre sea un array
+    setProducts(
+      (p || []).map((prod) => ({
+        ...prod,
+        image: Array.isArray(prod.image) ? prod.image : [],
+      }))
+    );
     setCategories(c || []);
   };
 
   const handleSave = async (payload) => {
-    let imageUrl = payload.image; // Si es edición, mantenemos la URL actual
+    if (isSaving) return; // Protección: no hacer nada si ya se está guardando
 
-    // 1. Subir imagen si existe un archivo nuevo
-    if (payload.imageFile) {
+    setIsSaving(true); // Bloquear al inicio
+
+    let finalImages = payload.image || [];
+
+    // 1. Subir nuevos archivos
+    if (payload.imageFiles && payload.imageFiles.length > 0) {
       try {
-        // Convertimos el archivo original a WebP antes de subirlo
-        const webpFile = await convertToWebP(payload.imageFile);
+        const uploadPromises = payload.imageFiles.map(async (file) => {
+          if (!file) return null;
+          const webpFile = await convertToWebP(file);
+          const fileName = `${Date.now()}_${Math.random()
+            .toString(36)
+            .substring(7)}.webp`;
+          const { error } = await supabase.storage
+            .from("products")
+            .upload(fileName, webpFile);
+          if (error) throw error;
+          return supabase.storage.from("products").getPublicUrl(fileName).data
+            .publicUrl;
+        });
 
-        // Usamos .webp como extensión fija
-        const fileName = `${Date.now()}_${Math.random()
-          .toString(36)
-          .substring(7)}.webp`;
-
-        const { data, error } = await supabase.storage
-          .from("products")
-          .upload(fileName, webpFile); // Subimos el nuevo archivo optimizado
-
-        if (error) throw error;
-
-        // Obtener URL pública
-        const { data: publicUrlData } = supabase.storage
-          .from("products")
-          .getPublicUrl(fileName);
-
-        imageUrl = publicUrlData.publicUrl;
+        const newUrls = (await Promise.all(uploadPromises)).filter(
+          (url) => url !== null
+        );
+        finalImages = [...finalImages, ...newUrls];
+        setIsOpen(false);
+        loadData();
       } catch (error) {
-        console.error("Error al procesar/subir la imagen:", error);
-        alert("Hubo un error al procesar la imagen. Inténtalo de nuevo.");
-        return; // Detenemos la ejecución si la imagen falla
+        console.error("Error al subir:", error);
+        alert("Error al procesar las imágenes.");
+        return;
+      } finally {
+        setIsSaving(false); // Desbloquear siempre, pase lo que pase
       }
     }
 
-    // 2. Guardar en la base de datos
     const finalPayload = {
       name: payload.name,
       price: parseFloat(payload.price) || 0,
       stock: parseInt(payload.stock) || 0,
       category_id: parseInt(payload.categoryId),
       specs: payload.specs || {},
-      image: imageUrl, // Aquí guardamos la URL pública (original o la nueva en webp)
+      image: finalImages, // Guardamos el array completo
       tag: payload.tag || "general",
     };
 
@@ -124,7 +126,7 @@ export const ProductManager = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("¿Eliminar?")) {
+    if (window.confirm("¿Eliminar producto?")) {
       await supabase.from("products").delete().eq("id", id);
       loadData();
     }
@@ -149,6 +151,8 @@ export const ProductManager = () => {
               price: "",
               categoryId: "",
               specs: {},
+              image: [],
+              imageFiles: [],
             });
             setIsOpen(true);
           }}
@@ -170,7 +174,11 @@ export const ProductManager = () => {
         totalPages={totalPages}
         // PASA LA FUNCIÓN REAL AQUÍ:
         onEdit={(p) => {
-          setFormData({ ...p, categoryId: p.category_id?.toString() });
+          setFormData({
+            ...p,
+            categoryId: p.category_id?.toString(),
+            imageFiles: [],
+          });
           setIsOpen(true);
         }}
         onDelete={handleDelete}
@@ -182,17 +190,14 @@ export const ProductManager = () => {
           <button
             disabled={page === 0}
             onClick={() => setPage(page - 1)}
-            className="p-2 border border-[#333535] text-xs"
+            className="cursor-pointer p-2 border border-[#333535] text-xs"
           >
             ANTERIOR
           </button>
-          <span className="p-2 text-xs font-mono">
-            Pág {page + 1} de {totalPages}
-          </span>
           <button
             disabled={page >= totalPages - 1}
             onClick={() => setPage(page + 1)}
-            className="p-2 border border-[#333535] text-xs"
+            className="cursor-pointer p-2 border border-[#333535] text-xs"
           >
             SIGUIENTE
           </button>
@@ -205,6 +210,7 @@ export const ProductManager = () => {
           categories={categories}
           onClose={() => setIsOpen(false)}
           onSave={handleSave}
+          isSaving={isSaving}
         />
       )}
       {detailProduct && (
@@ -230,11 +236,16 @@ export const ProductManager = () => {
 
             {/* Cuerpo del Modal */}
             <div className="space-y-6">
-              <img
-                src={detailProduct.image}
-                alt={detailProduct.name}
-                className="w-full h-48 object-cover border border-[#333535]/40"
-              />
+              <div className="grid grid-cols-2 gap-2 my-6">
+                {detailProduct.image?.map((url, i) => (
+                  <img
+                    key={i}
+                    src={url}
+                    alt={`Prod ${i}`}
+                    className="w-full h-24 object-cover border border-[#333535]/40"
+                  />
+                ))}
+              </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-[#111414] p-3 border border-[#333535]/40">

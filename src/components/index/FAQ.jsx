@@ -7,7 +7,6 @@ import {
   IoCard,
   IoConstruct,
   IoSettings,
-  IoHelpCircle,
 } from "react-icons/io5";
 
 export default function FAQ() {
@@ -56,21 +55,37 @@ export default function FAQ() {
       ),
     },
     {
-      q: "¿Cómo funciona el proceso de pago y envío?",
+      q: "¿Cómo funciona el proceso de pago y envío para provincia?",
       icon: <IoCard />,
       a: (
         <div className="space-y-3">
           <p>Pagos seguros en 2 pasos:</p>
+
           <ul className="space-y-2">
             <li>
-              <strong className="text-white font-bold">1. Adelanto:</strong>{" "}
-              Para iniciar armado y empaquetado.
+              <strong className="text-white font-bold">
+                1. Adelanto (Delivery):
+              </strong>{" "}
+              Para programar la entrega, es necesario realizar previamente el
+              pago del delivery. Una vez recibido, reservamos el espacio y
+              procedemos con el armado de la bicicleta.
             </li>
+
+            <li className="text-red-400 text-xs pl-4 italic">
+              ⚠️ En caso de cancelación por decisión del cliente después de la
+              programación, este pago no es reembolsable.
+            </li>
+
             <li>
-              <strong className="text-white font-bold">2. Saldo:</strong> Tras
-              recibir foto/video de la guía de remisión de la agencia.
+              <strong className="text-white font-bold">
+                2. Saldo de la bicicleta:
+              </strong>{" "}
+              Lo puede realizar con total tranquilidad al momento de recibir su
+              pedido. Tras recibir foto/video de la guía de remisión de la
+              agencia (para provincias).
             </li>
           </ul>
+
           <p className="text-xs text-[#ffb800] border-t border-[#333535] pt-2">
             📲 Incluye videollamadas para verificar el estado real de tu equipo.
           </p>

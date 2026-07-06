@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { useGlobalData } from "@/src/context/GlobalContext";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { FiX } from "react-icons/fi";
+
 export default function ElectricMotos() {
   const [motos, setMotos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedMoto, setSelectedMoto] = useState(null);
   const data = useGlobalData();
+
   useEffect(() => {
     fetchMotos();
   }, []);
@@ -14,21 +23,20 @@ export default function ElectricMotos() {
       const { data, error } = await supabase
         .from("products")
         .select("*, categories(name)");
-
       if (error) throw error;
 
-      // Filtramos manualmente por la categoría exacta
       const electricMotos = data.filter(
         (item) => item.categories?.name === "Bicimotos Eléctricas"
       );
 
-      // Mapeamos los datos de Supabase a la estructura de tu componente
       const formattedMotos = electricMotos.map((item) => ({
         id: item.id,
         tag: item.tag || "ELECTRICA",
         name: item.name,
         price: `s/${item.price}`,
-        image: item.image,
+        image: Array.isArray(item.image)
+          ? item.image
+          : [item.image].filter(Boolean),
         autonomia: item.specs?.autonomia || "N/A",
         motor: item.specs?.potencia || item.specs?.motor || "N/A",
         velocidad: item.specs?.velocidad || "N/A",
@@ -70,14 +78,25 @@ export default function ElectricMotos() {
                 key={moto.id}
                 className="bg-[#080a0a] border border-[#333535]/20 flex flex-col justify-between group"
               >
-                <div className="relative w-full h-[260px] bg-[#111414] overflow-hidden">
+                {/* IMAGEN CON HOVER Y MODAL */}
+                <div className="relative w-full h-[260px] bg-[#111414] overflow-hidden group">
                   <img
-                    src={moto.image}
+                    src={moto.image?.[0]}
                     alt={moto.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
+
                   <div className="font-mono absolute top-4 left-4 bg-[#ffb800] text-black text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1">
                     {moto.tag}
+                  </div>
+
+                  <div
+                    onClick={() => setSelectedMoto(moto)}
+                    className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer z-10"
+                  >
+                    <button className="bg-[#ffb800] px-6 py-3 text-black font-bold text-xs uppercase hover:bg-white transition-colors pointer-events-none">
+                      VER MÁS (+)
+                    </button>
                   </div>
                 </div>
 
@@ -118,11 +137,9 @@ export default function ElectricMotos() {
 
                   <div className="mt-8">
                     <a
-                      href={`${data.productWhatsAppMessageUrl}+${
-                        encodeURIComponent(moto.name) +
-                        " " +
-                        encodeURIComponent(moto.motor)
-                      }`}
+                      href={`${
+                        data.productWhatsAppMessageUrl
+                      }+${encodeURIComponent(moto.name)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex justify-center font-mono w-full bg-transparent border border-[#ffb800] text-[#ffb800] group-hover:bg-[#ffb800] group-hover:text-black font-bold text-xs uppercase tracking-[0.2em] py-4 transition-all duration-300"
@@ -136,6 +153,39 @@ export default function ElectricMotos() {
           </div>
         )}
       </div>
+
+      {/* MODAL SWIPER */}
+      {selectedMoto && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+          <div className="bg-[#080a0a] border border-[#333535] w-full max-w-[600px] p-8 relative">
+            <button
+              onClick={() => setSelectedMoto(null)}
+              className="cursor-pointer absolute top-4 right-4 z-10 text-white hover:text-[#ffb800]"
+            >
+              <FiX size={24} />
+            </button>
+            <h3 className="font-mono text-xl font-bold uppercase mb-6">
+              {selectedMoto.name}
+            </h3>
+            <Swiper
+              modules={[Navigation, Pagination]}
+              navigation
+              pagination={{ clickable: true }}
+              className="w-full h-[350px]"
+            >
+              {selectedMoto.image?.map((img, i) => (
+                <SwiperSlide key={i}>
+                  <img
+                    src={img}
+                    alt={selectedMoto.name}
+                    className="w-full h-full object-contain"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

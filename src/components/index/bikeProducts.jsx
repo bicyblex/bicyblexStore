@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { useGlobalData } from "@/src/context/GlobalContext";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { FiX } from "react-icons/fi";
 
 export default function Products() {
   const [activeAro, setActiveAro] = useState("TODOS");
   const [bikes, setBikes] = useState([]);
   const [loading, setLoading] = useState(true);
   const filterOptions = ["TODOS", "12", "16", "20", "24", "26", "27.5", "29"];
+  const [selectedBike, setSelectedBike] = useState(null);
   const data = useGlobalData();
   useEffect(() => {
     fetchProducts();
@@ -109,12 +116,23 @@ export default function Products() {
                   {bike.tag}
                 </div>
 
-                <div className="relative w-full h-[250px] bg-[#080a0a] overflow-hidden flex items-center justify-center px-4">
+                {/* Contenedor principal con la clase 'group' para activar el hover en los hijos */}
+                <div className="relative w-full h-[250px] bg-[#080a0a] overflow-hidden flex items-center justify-center px-4 group">
                   <img
-                    src={bike.image}
+                    src={bike.image?.[0] || "/placeholder.jpg"}
                     alt={bike.name}
                     className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                   />
+
+                  {/* Overlay que ocupa todo el espacio y es clicable */}
+                  <div
+                    onClick={() => setSelectedBike(bike)}
+                    className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer z-10"
+                  >
+                    <button className="bg-[#ffb800] px-6 py-3 text-black font-bold text-xs uppercase hover:bg-white transition-colors pointer-events-none">
+                      VER MÁS (+)
+                    </button>
+                  </div>
                 </div>
 
                 <div className="p-6 md:p-8 flex flex-col flex-grow">
@@ -164,6 +182,45 @@ export default function Products() {
           </div>
         )}
       </div>
+      {selectedBike && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+          <div className="bg-[#080a0a] border border-[#333535] w-full max-w-[600px] p-4 md:p-8 relative">
+            <button
+              onClick={() => setSelectedBike(null)}
+              className="cursor-pointer absolute top-4 right-4 z-10 text-white hover:text-[#ffb800] transition-colors"
+            >
+              <FiX size={24} />
+            </button>
+
+            <h3 className="font-mono text-xl font-bold uppercase mb-6 text-white">
+              {selectedBike.name}
+            </h3>
+
+            <Swiper
+              modules={[Navigation, Pagination]}
+              spaceBetween={20}
+              slidesPerView={1}
+              color="red"
+              navigation
+              pagination={{ clickable: true }}
+              className="w-full h-[350px]"
+            >
+              {selectedBike.image?.map((img, i) => (
+                <SwiperSlide
+                  key={i}
+                  className="flex items-center justify-center"
+                >
+                  <img
+                    src={img}
+                    alt={`Vista ${i + 1}`}
+                    className="w-full h-full object-contain"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

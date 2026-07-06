@@ -20,3 +20,24 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+html {
+  scroll-behavior: smooth;
+}
+
+/* Color de las flechas de navegación */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #ffb800 !important;
+}
+
+/* Color del punto activo en la paginación */
+.swiper-pagination-bullet-active {
+  background: #ffb800 !important;
+  opacity: 1 !important;
+}
+
+/* Color de los puntos inactivos (opcional, para que combinen) */
+.swiper-pagination-bullet {
+  background: #ffffff !important;
+  opacity: 0.5 !important;
+}

@@ -1,7 +1,6 @@
 import React from "react";
-import { FiX } from "react-icons/fi";
+import { FiX, FiPlus } from "react-icons/fi";
 
-// He ajustado las llaves para que coincidan EXACTAMENTE con tus slugs de la BD
 const CONFIG = {
   bicicletas: [
     { key: "aro", label: "Aro" },
@@ -27,19 +26,20 @@ export const ProductForm = ({
   categories,
   onClose,
   onSave,
+  isSaving,
 }) => {
-  // Buscamos la categoría seleccionada
   const cat = categories.find(
     (c) => c.id.toString() === formData.categoryId?.toString()
   );
-
-  // CORRECCIÓN: Usamos el slug directamente (cat.slug), que coincide con el CONFIG
   const fields = cat ? CONFIG[cat.slug] || [] : [];
+
+  // Calcular total de imágenes (existentes en BD + nuevos archivos seleccionados)
+  const totalImages =
+    (formData.image?.length || 0) + (formData.imageFiles?.length || 0);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
       <div className="bg-[#080a0a] border border-[#333535]/40 w-full max-w-[650px] max-h-[90vh] overflow-y-auto p-8 relative">
-        {/* Botón Cerrar */}
         <button
           onClick={onClose}
           className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors cursor-pointer"
@@ -61,7 +61,7 @@ export const ProductForm = ({
             e.preventDefault();
             onSave(formData);
           }}
-          className="space-y-5"
+          className="space-y-4"
         >
           <div>
             <label className="font-mono block text-[10px] font-bold uppercase text-gray-500 mb-1">
@@ -133,18 +133,79 @@ export const ProductForm = ({
             </select>
           </div>
 
+          {/* Bloque de Imágenes Multiples */}
           <div>
-            <label className="font-mono block text-[10px] font-bold uppercase text-gray-500 mb-1">
-              Imagen del Producto
+            <label className="font-mono block text-[10px] font-bold uppercase text-gray-500 mb-2">
+              Imágenes del Producto ({totalImages}/7)
             </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) =>
-                setFormData({ ...formData, imageFile: e.target.files[0] })
-              }
-              className="w-full bg-[#111414] border border-[#333535]/40 p-3 font-mono text-xs text-gray-400 file:mr-4 file:bg-[#ffb800] file:text-black file:font-bold file:text-[10px] file:uppercase cursor-pointer"
-            />
+            <div className="space-y-2">
+              {/* Imágenes existentes */}
+              {formData.image?.map((url, i) => (
+                <div
+                  key={`ex-${i}`}
+                  className="flex gap-2 items-center bg-[#111414] border border-[#333535]/40 p-2"
+                >
+                  <span className="text-[10px] text-gray-400 truncate w-full">
+                    Imagen cargada: {url.split("/").pop()}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData({
+                        ...formData,
+                        image: formData.image.filter((_, idx) => idx !== i),
+                      })
+                    }
+                    className="text-gray-500 hover:text-red-500 cursor-pointer"
+                  >
+                    <FiX size={16} />
+                  </button>
+                </div>
+              ))}
+              {/* Inputs nuevos */}
+              {formData.imageFiles?.map((_, index) => (
+                <div key={`new-${index}`} className="flex gap-2 items-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const newFiles = [...(formData.imageFiles || [])];
+                      newFiles[index] = e.target.files[0];
+                      setFormData({ ...formData, imageFiles: newFiles });
+                    }}
+                    className="w-full bg-[#111414] border border-[#333535]/40 p-2 text-xs text-gray-400 file:bg-[#ffb800] file:text-black file:border-0 file:text-[10px] file:font-bold file:uppercase cursor-pointer"
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData({
+                        ...formData,
+                        imageFiles: formData.imageFiles.filter(
+                          (_, i) => i !== index
+                        ),
+                      })
+                    }
+                    className="text-gray-500 hover:text-red-500 cursor-pointer"
+                  >
+                    <FiX size={16} />
+                  </button>
+                </div>
+              ))}
+              {totalImages < 7 && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData({
+                      ...formData,
+                      imageFiles: [...(formData.imageFiles || []), null],
+                    })
+                  }
+                  className="cursor-pointer w-full py-2 border border-dashed border-[#333535] text-[10px] text-gray-500 hover:text-white hover:border-[#ffb800] transition-colors flex items-center justify-center gap-2"
+                >
+                  <FiPlus /> AGREGAR IMAGEN
+                </button>
+              )}
+            </div>
           </div>
 
           {fields.length > 0 && (
@@ -152,7 +213,6 @@ export const ProductForm = ({
               <label className="font-mono block text-[10px] font-bold uppercase text-gray-500 mb-3">
                 Especificaciones Técnicas
               </label>
-              {/* Grid de 2 columnas para las especificaciones */}
               <div className="grid grid-cols-1 gap-3">
                 {fields.map((f) => (
                   <input
@@ -175,9 +235,14 @@ export const ProductForm = ({
 
           <button
             type="submit"
-            className="cursor-pointer font-mono w-full bg-[#ffb800] text-black font-bold text-xs uppercase py-4 mt-2 tracking-widest transition-all hover:bg-white"
+            disabled={isSaving} // Deshabilita el botón nativamente
+            className={`font-mono w-full font-bold text-xs uppercase py-4 mt-2 tracking-widest transition-all ${
+              isSaving
+                ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                : "bg-[#ffb800] text-black hover:bg-white cursor-pointer"
+            }`}
           >
-            Guardar en el sistema
+            {isSaving ? "PROCESANDO DATOS..." : "GUARDAR REGISTRO"}
           </button>
         </form>
       </div>

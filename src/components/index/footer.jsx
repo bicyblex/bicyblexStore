@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 pb-20">
           {/* COLUMNA 1: LOGO, DESCRIPCIÓN E ICONOS */}
           <div className="space-y-6">
-            <img src="/logo.png" alt="Logo" className="w-56" />
+            <img src="/logo.png" alt="Logo" className="w-32 lg:w-42 h-auto" />
             <p className="text-[#d5c4ab] text-xs md:text-[13px] leading-relaxed tracking-wide max-w-[320px]">
               Diseñamos máquinas para quienes no conocen los límites. La
               convergencia entre ingeniería mecánica de precisión y propulsión

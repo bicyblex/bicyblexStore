@@ -114,23 +114,9 @@ export const ProductTable = ({
 
     {/* Paginación integrada en el componente */}
     <div className="flex justify-center gap-4">
-      <button
-        disabled={page === 0}
-        onClick={() => setPage(page - 1)}
-        className="text-[10px] border p-2"
-      >
-        ANTERIOR
-      </button>
       <span className="text-[10px] p-2 font-mono">
         PÁGINA {page + 1} de {totalPages || 1}
       </span>
-      <button
-        disabled={page >= totalPages - 1}
-        onClick={() => setPage(page + 1)}
-        className="text-[10px] border p-2"
-      >
-        SIGUIENTE
-      </button>
     </div>
   </div>
 );
