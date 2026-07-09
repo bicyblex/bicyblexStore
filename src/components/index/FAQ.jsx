@@ -55,40 +55,44 @@ export default function FAQ() {
       ),
     },
     {
-      q: "¿Cómo funciona el proceso de pago y envío para provincia?",
+      q: "Sobe el proceso de compra y envío para provincia",
       icon: <IoCard />,
       a: (
-        <div className="space-y-3">
-          <p>Pagos seguros en 2 pasos:</p>
+        <div className="space-y-4 text-gray-200">
+          <p>El pago se realiza en 2 pasos sencillos para su seguridad 👇</p>
 
-          <ul className="space-y-2">
+          <ul className="space-y-4">
             <li>
-              <strong className="text-white font-bold">
-                1. Adelanto (Delivery):
-              </strong>{" "}
-              Para programar la entrega, es necesario realizar previamente el
-              pago del delivery. Una vez recibido, reservamos el espacio y
-              procedemos con el armado de la bicicleta.
-            </li>
-
-            <li className="text-red-400 text-xs pl-4 italic">
-              ⚠️ En caso de cancelación por decisión del cliente después de la
-              programación, este pago no es reembolsable.
+              <strong className="text-white font-bold block mb-1">
+                1️⃣ Primera parte:
+              </strong>
+              Se realiza un adelanto para comenzar con el armado, empaquetado y
+              preparación del envío de su bicicleta.
             </li>
 
             <li>
-              <strong className="text-white font-bold">
-                2. Saldo de la bicicleta:
-              </strong>{" "}
-              Lo puede realizar con total tranquilidad al momento de recibir su
-              pedido. Tras recibir foto/video de la guía de remisión de la
-              agencia (para provincias).
+              <strong className="text-white font-bold block mb-1">
+                2️⃣ Segunda parte:
+              </strong>
+              Cuando la bicicleta ya está lista y dejada en la agencia, le
+              enviamos 📸 foto y video de la guía de remisión (comprobante del
+              envío).
+              <br />
+              Luego de eso, realiza el segundo pago.
             </li>
           </ul>
 
-          <p className="text-xs text-[#ffb800] border-t border-[#333535] pt-2">
-            📲 Incluye videollamadas para verificar el estado real de tu equipo.
-          </p>
+          <div className="border-t border-[#333535] pt-3 space-y-3">
+            <p className="text-sm text-[#ffb800]">
+              📲 Durante todo el proceso le enviamos videos o podemos hacer
+              videollamada para que vea el estado real de su bicicleta y el
+              envío.
+            </p>
+
+            <p className="text-emerald-400 font-medium">
+              Así usted tiene garantía y confianza total en su compra. ✅
+            </p>
+          </div>
         </div>
       ),
     },
